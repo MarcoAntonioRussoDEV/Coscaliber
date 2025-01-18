@@ -7,6 +7,7 @@ export default class Line {
     color;
     borderWith;
     size;
+    isHidden = false;
 
     constructor() {
         this.name =

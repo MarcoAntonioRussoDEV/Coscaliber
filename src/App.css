@@ -111,3 +111,15 @@
 .fade-in {
     animation: fadeIn 200ms ease-in-out;
 }
+
+.bg-stripes {
+    --stripe-width: 10px;
+    background: repeating-linear-gradient(
+        125deg,
+        hsl(var(--background)) 0,
+        hsl(var(--background)) var(--stripe-width),
+        hsl(var(--accent)) var(--stripe-width),
+        hsl(var(--accent)) calc(var(--stripe-width) * 2)
+    );
+    border: 1px dashed hsl(var(--accent-foreground) / 0.4);
+}

@@ -39,7 +39,7 @@ const initialState = {
     referenceLine: null,
     isDrawing: false,
     isEdit: false,
-    referenceHeight: 170, //TODO: change to null
+    referenceHeight: null, //TODO: change to null
     dots: 0,
     pixelToCmRatio: null,
     selectedLineId: null,
@@ -47,6 +47,7 @@ const initialState = {
         x: 0,
         y: 0,
     },
+    image: null,
 };
 
 const lineSlice = createSlice({
@@ -78,8 +79,7 @@ const lineSlice = createSlice({
             );
         },
         deleteAllLines(state) {
-            state.lines = [];
-            state.referenceLine = null;
+            Object.assign(state, initialState);
             LineModel.id = 0;
         },
         setSelectedLineId(state, action) {
@@ -102,6 +102,14 @@ const lineSlice = createSlice({
             state.lines.pop();
             state.lines.push(line);
         },
+        hideLine(state, action) {
+            const line = state.lines.find(line => line.id === action.payload);
+            line.isHidden = true;
+        },
+        showLine(state, action) {
+            const line = state.lines.find(line => line.id === action.payload);
+            line.isHidden = false;
+        },
         /* Bools */
         setIsDrawing(state, action) {
             state.isDrawing = action.payload;
@@ -112,8 +120,10 @@ const lineSlice = createSlice({
         /* Constants */
         setReferenceHeight(state, action) {
             state.referenceHeight = action.payload;
-            state.referenceLine.size = state.referenceHeight;
-            calculateReferenceHeightOnEdit(state);
+            if (state.referenceLine) {
+                state.referenceLine.size = state.referenceHeight;
+                calculateReferenceHeightOnEdit(state);
+            }
         },
         /* Dots */
         setDots(state, action) {
@@ -129,6 +139,10 @@ const lineSlice = createSlice({
         setMousePosition(state, action) {
             state.mouse = action.payload;
         },
+        /* Image */
+        setImage(state, action) {
+            state.image = action.payload;
+        },
     },
 });
 
@@ -140,6 +154,8 @@ export const {
     addNewLine,
     deleteLine,
     deleteAllLines,
+    hideLine,
+    showLine,
     setIsDrawing,
     setIsEdit,
     setReferenceHeight,
@@ -150,5 +166,6 @@ export const {
     setSelectedLineId,
     setLastLineFrom,
     setLastLineTo,
+    setImage,
 } = lineSlice.actions;
 export default lineSlice.reducer;

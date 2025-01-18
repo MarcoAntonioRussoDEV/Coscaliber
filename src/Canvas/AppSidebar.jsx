@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ElementRow from "./ElementRow";
 import { Button } from "@/components/ui/button";
 import {
@@ -33,7 +33,7 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Tooltip } from "@/components/ui/tooltip";
-import { deleteAllLines } from "@/Redux/Redux-Slices/lineSlicePREV";
+import { deleteAllLines, setImage } from "@/Redux/Redux-Slices/lineSlicePREV";
 
 const AppSidebar = () => {
     const dispatch = useDispatch();
@@ -51,6 +51,30 @@ const AppSidebar = () => {
 
     const handleDeleteAllLines = () => {
         dispatch(deleteAllLines());
+    };
+
+    const handleDownloadJson = () => {
+        let downlodableLines = [referenceLine, ...lines];
+        const dataStr = JSON.stringify(downlodableLines, null, 2);
+        const blob = new Blob([dataStr], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "lines.json";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
+    const handleImageUpload = e => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                dispatch(setImage(reader.result));
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     return (
@@ -73,7 +97,11 @@ const AppSidebar = () => {
                                 placeholder="cm"
                                 variant="secondary"
                                 onChange={handleHeightChange}
-                                value={referenceHeight}
+                                value={
+                                    referenceHeight != null
+                                        ? referenceHeight
+                                        : ""
+                                }
                             />
                         </Label>
                         <TooltipProvider delayDuration={100}>
@@ -94,11 +122,9 @@ const AppSidebar = () => {
                                     <TooltipContent
                                         side="left"
                                         sideOffset={12}
+                                        className="text-center bg-secondary text-secondary-foreground p-2 border shadow"
                                     >
-                                        <p className="bg-accent p-2 rounded-lg border text-sm italic">
-                                            Aggiungi prima un'altezza di
-                                            riferimento
-                                        </p>
+                                        Aggiungi prima un'altezza di riferimento
                                     </TooltipContent>
                                 )}
                             </Tooltip>
@@ -123,6 +149,20 @@ const AppSidebar = () => {
                     </SidebarMenu>
                 </SidebarContent>
                 <SidebarFooter>
+                    <Label>
+                        <p className="p-1">Carica Immagine</p>
+                        <Input
+                            type="file"
+                            className="bg-background"
+                            onChange={handleImageUpload}
+                        />
+                    </Label>
+                    <Button
+                        onClick={handleDownloadJson}
+                        className="w-full"
+                    >
+                        Scarica JSON
+                    </Button>
                     <AlertDialogTrigger asChild>
                         <SidebarMenuButton variant="destructive">
                             <p className="text-center w-full">
@@ -132,7 +172,7 @@ const AppSidebar = () => {
                     </AlertDialogTrigger>
                 </SidebarFooter>
             </Sidebar>
-
+            {/* //? MODAL */}
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>
