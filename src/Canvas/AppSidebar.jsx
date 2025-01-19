@@ -33,13 +33,15 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Tooltip } from "@/components/ui/tooltip";
-import { deleteAllLines, setImage } from "@/Redux/Redux-Slices/lineSlicePREV";
+import { deleteAllLines, setImage } from "@/Redux/Redux-Slices/lineSlice";
 
 const AppSidebar = () => {
     const dispatch = useDispatch();
-    const { referenceHeight, lines, referenceLine } = useSelector(
-        state => state.lines
-    );
+    const {
+        calculated: { referenceHeight },
+        lines,
+        referenceLine,
+    } = useSelector(state => state.lines);
 
     const handleSetDrawing = () => {
         dispatch(setIsDrawing(true));
@@ -133,12 +135,6 @@ const AppSidebar = () => {
                     <SidebarMenu>
                         <SidebarGroupLabel>Linee</SidebarGroupLabel>
                         <SidebarGroup className="flex flex-col gap-1">
-                            {referenceLine && (
-                                <ElementRow
-                                    key={referenceLine.id}
-                                    line={referenceLine}
-                                />
-                            )}
                             {lines.map(line => (
                                 <ElementRow
                                     key={line.id}

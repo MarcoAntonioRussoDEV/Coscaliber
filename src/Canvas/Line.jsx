@@ -4,9 +4,10 @@ import { useSelector } from "react-redux";
 const Line = ({ line }) => {
     const { from, to, color, borderWidth, id } = line;
 
-    const { selectedLineId, pixelToCmRatio, referenceHeight } = useSelector(
-        state => state.lines
-    );
+    const {
+        calculated: { pixelToCmRatio, referenceHeight },
+        utils: { selectedLineId },
+    } = useSelector(state => state.lines);
     const { x: x1, y: y1 } = from;
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 

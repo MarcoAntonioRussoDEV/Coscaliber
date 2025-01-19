@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import lineSlice from "./Redux-Slices/lineSlicePREV";
+import lineSlice from "./Redux-Slices/lineSlice";
 
 export const store = configureStore({
     reducer: {

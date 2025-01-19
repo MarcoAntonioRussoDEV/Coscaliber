@@ -1,6 +1,5 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
 import AppSidebar from "../Canvas/AppSidebar";
-import DrawingCanvas from "../Canvas/DrawingCanvas";
 import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import Canvas from "@/Canvas/Canvas";

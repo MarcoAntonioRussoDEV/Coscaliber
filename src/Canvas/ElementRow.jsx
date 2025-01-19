@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
     Eye,
     EyeOff,
@@ -20,16 +20,25 @@ import {
 } from "@/components/ui/sidebar";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteLine, setSelectedLineId } from "@redux/lineSlice.js";
-import { hideLine, showLine } from "@/Redux/Redux-Slices/lineSlicePREV";
+import {
+    hideLine,
+    setLineColor,
+    showLine,
+} from "@/Redux/Redux-Slices/lineSlice";
+import useLineActions from "@/Hooks/use-line-actions";
+import { Input } from "@/components/ui/input";
+import { GradientPicker } from "@/components/ui/color-picker";
 
 const ElementRow = ({ line }) => {
     const [lineName, setLineName] = useState();
     const dispatch = useDispatch();
-    const { selectedLineId } = useSelector(state => state.lines);
+    const {
+        utils: { selectedLineId },
+    } = useSelector(state => state.lines);
 
     useEffect(() => {
         setLineName(line.name);
-    }, []);
+    }, [line]);
 
     const handleClick = lineID => {
         if (selectedLineId === lineID) {
@@ -38,54 +47,28 @@ const ElementRow = ({ line }) => {
             dispatch(setSelectedLineId(lineID));
         }
     };
-    const dropDownActions = [
-        {
-            label: "Rinomina",
-            action: () => {
-                const newName = prompt("Inserisci il nome della linea");
-                if (newName) {
-                    setLineName(newName);
-                }
-            },
-            icon: <Pencil size={12} />,
-        },
-        ...(line.isHidden
-            ? [
-                  {
-                      label: "Mostra",
-                      action: () => {
-                          dispatch(showLine(line.id));
-                      },
-                      icon: <Eye size={12} />,
-                  },
-              ]
-            : [
-                  {
-                      label: "Nascondi",
-                      action: () => {
-                          dispatch(hideLine(line.id));
-                      },
-                      icon: <EyeOff size={12} />,
-                  },
-              ]),
 
-        ...(line.id !== 1
-            ? [
-                  {
-                      label: "Elimina",
-                      action: () => {
-                          dispatch(deleteLine(line.id));
-                      },
-                      icon: <Trash2 size={12} />,
-                      className: "hover:bg-red-800",
-                  },
-              ]
-            : []),
-    ];
+    const refer = useRef(null);
+
+    useEffect(() => {
+        const setSeletedLine = () => {
+            dispatch(setSelectedLineId(line.id));
+        };
+
+        refer.current.addEventListener("mouseover", setSeletedLine);
+
+        refer.current.addEventListener("mouseout", () => {
+            dispatch(setSelectedLineId(null));
+            refer.current.addEventListener("mouseover", setSeletedLine);
+        });
+    }, [selectedLineId]);
+
+    const dropDownActions = useLineActions(line);
 
     return (
         <SidebarMenuItem>
             <SidebarMenuButton
+                ref={refer}
                 variant={
                     line.id === 1
                         ? "striped"
@@ -96,7 +79,24 @@ const ElementRow = ({ line }) => {
                 onClick={() => handleClick(line.id)}
                 className={`fade-in ${line.isHidden ? "opacity-35" : ""}`}
             >
-                <div className="cursor-pointer text-white flex justify-between w-full items-center px-2 ">
+                <div className="cursor-pointer text-white flex justify-between w-full items-center ">
+                    {/* <div
+                        style={{ backgroundColor: line.color }}
+                        className="flex min-h-[350px] justify-center p-10 items-center rounded transition-all"
+                    >
+                        <GradientPicker
+                            className="w-full truncate "
+                            background={line.color}
+                            setBackground={e => {
+                                dispatch(
+                                    setLineColor({
+                                        id: line.id,
+                                        color: "green",
+                                    })
+                                );
+                            }}
+                        />
+                    </div> */}
                     <p className="truncate whitespace-nowrap text-xs">
                         {lineName} -{" "}
                         <span className="italic text-muted-foreground">

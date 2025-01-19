@@ -8,13 +8,15 @@ export default class Line {
     borderWith;
     size;
     isHidden = false;
+    isReferenceLine;
 
     constructor() {
         this.name =
             Line.id === 0 ? "Altezza di riferimento" : `Linea ${Line.id}`;
         Line.id++;
         this.id = Line.id;
-        this.color = "white";
+        this.isReferenceLine = Line.id === 1;
+        this.color = "#fff";
         this.borderWith = 2;
     }
 

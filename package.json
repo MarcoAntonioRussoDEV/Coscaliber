@@ -55,6 +55,8 @@
     "react-hook-form": "^7.54.2",
     "react-redux": "^9.2.0",
     "react-resizable-panels": "^2.1.7",
+    "react-router": "^7.1.3",
+    "react-router-dom": "^7.1.3",
     "recharts": "^2.15.0",
     "sonner": "^1.7.2",
     "tailwind-merge": "^2.6.0",
@@ -76,6 +78,7 @@
     "globals": "^15.14.0",
     "postcss": "^8.5.1",
     "tailwindcss": "^3.4.17",
+    "view-shadcn-ui": "^2025.1.1",
     "vite": "^6.0.5"
   }
 }

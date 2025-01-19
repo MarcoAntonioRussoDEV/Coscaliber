@@ -19,11 +19,9 @@ const DrawingCanvas = () => {
     const {
         lines,
         elements,
-        isDrawing,
+        bools: { isDrawing, dots },
         mouse: { x: mouseX, y: mouseY },
-        dots,
         pointPairs,
-        canvas,
     } = useSelector(state => state.lines);
     const dispatch = useDispatch();
     const { createElement } = useCanvasElement();

@@ -1,139 +1,218 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
+import LineModel from "@/Models/LineModel";
 
-const calculateRatio = (state) => {
-  const { pointPairs } = state;
-  const referenceLine = pointPairs[0];
+const calculateRatio = state => {
+    const {
+        from: { x: x1, y: y1 },
+        to: { x: x2, y: y2 },
+    } = state.referenceLine;
 
-  const distanceInPx = Math.sqrt(
-    Math.pow(referenceLine[1].x - referenceLine[0].x, 2) +
-      Math.pow(referenceLine[1].y - referenceLine[0].y, 2),
-  );
-  const distanceInCm = state.referenceHeight;
-  state.pixelToCmRatio = distanceInPx / distanceInCm;
+    const distanceInPx = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    const distanceInCm = state.calculated.referenceHeight;
+    state.calculated.pixelToCmRatio = distanceInPx / distanceInCm;
 };
 
-const calculateDistanceInCm = (state, from, to) => {
-  const { x: x1, y: y1 } = from;
-  const { x: x2, y: y2 } = to;
+const calculateDistanceInCm = (state, { from, to }) => {
+    const { x: x1, y: y1 } = from;
+    const { x: x2, y: y2 } = to;
 
-  const distanceInPx = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-  const distanceInCm = state.pixelToCmRatio
-    ? distanceInPx / state.pixelToCmRatio
-    : 0;
-  return distanceInCm.toFixed(2);
+    const distanceInPx = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    const distanceInCm = state.calculated.pixelToCmRatio
+        ? distanceInPx / state.calculated.pixelToCmRatio
+        : 0;
+    return distanceInCm.toFixed(2);
 };
 
-const createNewLine = (state) => {
-  const lastPair = state.pointPairs[state.pointPairs.length - 1];
-  const from = lastPair[0];
-  const to = lastPair[1];
-  return {
-    id: `line-${state.lines.length}`,
-    from,
-    to,
-    distance: calculateDistanceInCm(state, from, to),
-  };
+const getMousePosition = state => {
+    return { x: state.mouse.x, y: state.mouse.y };
+};
+
+const calculateReferenceHeightOnEdit = state => {
+    calculateRatio(state);
+    state.lines.forEach(line => {
+        line.size = calculateDistanceInCm(state, line);
+    });
+};
+
+const resetIsDrawing = state => {
+    state.bools.isDrawing = false;
 };
 
 const initialState = {
-  canvas: null,
-  lines: [],
-  isDrawing: false,
-  referenceHeight: 170, //TODO: change to null
-  elements: [],
-  dots: 0,
-  pointPairs: [],
-  pixelToCmRatio: null,
-  selectedLineId: null,
-  mouse: {
-    x: 0,
-    y: 0,
-  },
+    lines: [],
+    referenceLine: null,
+    bools: {
+        isDrawing: false,
+        isEdit: false,
+        dots: 0,
+    },
+    calculated: {
+        referenceHeight: null, //TODO: change to null
+        pixelToCmRatio: null,
+    },
+    mouse: {
+        x: 0,
+        y: 0,
+    },
+    utils: {
+        selectedLineId: null,
+    },
+    image: null,
 };
 
 const lineSlice = createSlice({
-  name: 'lines',
-  initialState,
-  reducers: {
-    /* Canvas */
-    setCanvas(state, action) {
-      state.canvas = action.payload;
+    name: "lines",
+    initialState,
+    reducers: {
+        /* ! ReferenceLine */
+        setReferenceLineFrom(state) {
+            state.bools.dots = 1;
+            const line = new LineModel();
+            line.from = getMousePosition(state);
+            line.to = null;
+            state.referenceLine = line;
+        },
+        setReferenceLineTo(state) {
+            state.bools.dots = 0;
+            const line = {
+                ...state.referenceLine,
+                to: getMousePosition(state),
+            };
+
+            state.referenceLine = line;
+            state.referenceLine.size = state.calculated.referenceHeight;
+            calculateRatio(state);
+            state.lines.push(line);
+
+            resetIsDrawing(state);
+        },
+        /* ! Lines */
+        deleteLine(state, action) {
+            state.lines = state.lines.filter(
+                line => line.id !== action.payload
+            );
+        },
+        deleteAllLines(state) {
+            Object.assign(state, initialState);
+            LineModel.id = 0;
+        },
+        setSelectedLineId(state, action) {
+            state.utils.selectedLineId = action.payload;
+        },
+        setLastLineFrom(state) {
+            state.bools.dots = 1;
+            const line = new LineModel();
+            line.from = getMousePosition(state);
+            line.to = null;
+            state.lines.push(line);
+        },
+        setLastLineTo(state) {
+            state.bools.dots = 0;
+            const line = {
+                ...state.lines.at(-1),
+                to: getMousePosition(state),
+            };
+            line.size = calculateDistanceInCm(state, line);
+            state.lines.pop();
+            state.lines.push(line);
+
+            resetIsDrawing(state);
+        },
+        hideLine(state, action) {
+            const index = state.lines.findIndex(
+                line => line.id === action.payload.id
+            );
+            if (index !== -1) {
+                state.lines[index].isHidden = true;
+            }
+        },
+        showLine(state, action) {
+            const index = state.lines.findIndex(
+                line => line.id === action.payload.id
+            );
+            if (index !== -1) {
+                state.lines[index].isHidden = false;
+            }
+        },
+        setLineColor(state, action) {
+            const index = state.lines.findIndex(
+                line => line.id === action.payload.id
+            );
+            if (index !== -1) {
+                state.lines[index].color = action.payload.color;
+            }
+        },
+        setLineName(state, action) {
+            const index = state.lines.findIndex(
+                line => line.id === action.payload.id
+            );
+            if (index !== -1) {
+                console.log(
+                    "state.lines[index].name: ",
+                    state.lines[index].name
+                );
+                state.lines[index].name = action.payload.name;
+            }
+        },
+        /* ! ! Bools */
+        setIsDrawing(state, action) {
+            state.bools.isDrawing = action.payload;
+        },
+        setIsEdit(state, action) {
+            /* TODO Edit */
+            state.bools.isEdit = action.payload;
+        },
+        /* ! Constants */
+        setReferenceHeight(state, action) {
+            state.calculated.referenceHeight = action.payload;
+            if (state.referenceLine) {
+                state.referenceLine.size = state.calculated.referenceHeight;
+                calculateReferenceHeightOnEdit(state);
+            }
+        },
+        /* ! Dots */
+        setDots(state, action) {
+            state.bools.dots = action.payload;
+        },
+        /* ! Mouse */
+        setMouseX(state, action) {
+            state.mouse.x = action.payload;
+        },
+        setMouseY(state, action) {
+            state.mouse.y = action.payload;
+        },
+        setMousePosition(state, action) {
+            state.mouse = action.payload;
+        },
+        /* ! Image */
+        setImage(state, action) {
+            state.image = action.payload;
+        },
     },
-    /* Lines */
-    addNewLine(state) {
-      const newLine = createNewLine(state);
-      state.lines.push(newLine);
-    },
-    deleteLine(state, action) {
-      state.lines = state.lines.filter((line) => line.id !== action.payload);
-    },
-    setSelectedLineId(state, action) {
-      state.selectedLineId = action.payload;
-    },
-    /* Bools */
-    setIsDrawing(state, action) {
-      state.isDrawing = action.payload;
-    },
-    /* Constants */
-    setReferenceHeight(state, action) {
-      state.referenceHeight = action.payload;
-    },
-    /* Elements */
-    setElements(state, action) {
-      state.elements = action.payload;
-    },
-    addElement(state, action) {
-      state.elements.push(action.payload);
-    },
-    /* Dots */
-    setDots(state, action) {
-      state.dots = action.payload;
-    },
-    setPointPairs(state, action) {
-      state.pointPairs = action.payload;
-    },
-    addPointsPair(state, action) {
-      state.pointPairs.push(action.payload);
-    },
-    setLastPointsPair(state, action) {
-      state.pointPairs[state.pointPairs.length - 1] = action.payload;
-    },
-    addLastPointToLastPair(state, action) {
-      state.pointPairs[state.pointPairs.length - 1].push(action.payload);
-      if (state.pointPairs.length === 1) {
-        calculateRatio(state);
-      }
-      state.isDrawing = false;
-    },
-    /* Mouse */
-    setMouseX(state, action) {
-      state.mouse.x = action.payload;
-    },
-    setMouseY(state, action) {
-      state.mouse.y = action.payload;
-    },
-    setMousePosition(state, action) {
-      state.mouse = action.payload;
-    },
-  },
 });
 
 export const {
-  setCanvas,
-  addNewLine,
-  deleteLine,
-  setIsDrawing,
-  setReferenceHeight,
-  setElements,
-  addElement,
-  setDots,
-  setPointPairs,
-  addPointsPair,
-  setMouseX,
-  setMouseY,
-  setMousePosition,
-  setLastPointsPair,
-  addLastPointToLastPair,
-  setSelectedLineId,
+    setCanvas,
+    setReferenceLine,
+    setReferenceLineFrom,
+    setReferenceLineTo,
+    addNewLine,
+    deleteLine,
+    deleteAllLines,
+    hideLine,
+    showLine,
+    setIsDrawing,
+    setIsEdit,
+    setReferenceHeight,
+    setDots,
+    setMouseX,
+    setMouseY,
+    setMousePosition,
+    setSelectedLineId,
+    setLastLineFrom,
+    setLastLineTo,
+    setImage,
+    setLineColor,
+    setLineName,
 } = lineSlice.actions;
 export default lineSlice.reducer;

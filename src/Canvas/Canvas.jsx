@@ -7,21 +7,18 @@ import {
     setMousePosition,
     setReferenceLineFrom,
     setReferenceLineTo,
-} from "@/Redux/Redux-Slices/lineSlicePREV";
+} from "@/Redux/Redux-Slices/lineSlice";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Line from "./Line";
 import LineModel from "@/Models/LineModel";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-
 const Canvas = () => {
     const {
-        isDrawing,
-        isEdit,
+        bools: { isDrawing, dots, isEdit },
         mouse: { x: mouseX, y: mouseY },
         lines,
         referenceLine,
-        dots,
         image,
     } = useSelector(state => state.lines);
     const dispatch = useDispatch();
@@ -42,8 +39,6 @@ const Canvas = () => {
 
     const handleDoubleDotsLogic = (firstPointAction, secondPointAction) => {
         if (dots === 0) {
-            // const line = new LineModel();
-            // line.from = { x: mouseX, y: mouseY };
             dispatch(firstPointAction());
         } else {
             dispatch(secondPointAction());
@@ -57,16 +52,6 @@ const Canvas = () => {
             } else {
                 handleDoubleDotsLogic(setLastLineFrom, setLastLineTo);
             }
-
-            // if (dots === 0) {
-            //     dispatch(setDots(1));
-            //     const line = new LineModel();
-            //     line.from = { x: mouseX, y: mouseY };
-            //     dispatch(addNewLine(line));
-            // } else {
-            //     dispatch(setDots(0));
-            //     dispatch(setLastLineTo({ x: mouseX, y: mouseY }));
-            // }
         }
     };
 
@@ -92,7 +77,6 @@ const Canvas = () => {
                     />
                 </div>
             )}
-            {referenceLine && <Line line={referenceLine} />}
             {lines
                 .filter(line => !line.isHidden)
                 .map(line => (
