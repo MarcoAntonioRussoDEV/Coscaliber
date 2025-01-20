@@ -3,7 +3,7 @@
     "private": true,
     "version": "0.0.0",
     "type": "module",
-    "homepage": "./Cosplay_calculator/",
+    "homepage": "https://marcoantoniorussodev.github.io/Cosplay_calculator/",
     "scripts": {
         "dev": "vite",
         "build": "vite build",
