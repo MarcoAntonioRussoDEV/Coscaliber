@@ -5,7 +5,7 @@ import { Routes, Route } from "react-router-dom";
 
 function App() {
     return (
-        <Routes basename="/Cosplay_calculator/">
+        <Routes>
             <Route
                 path="/"
                 element={<Homepage />}
