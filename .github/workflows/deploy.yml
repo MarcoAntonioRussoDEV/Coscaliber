@@ -7,28 +7,45 @@ on:
 
 jobs:
     build:
+        name: Build
         runs-on: ubuntu-latest
 
         steps:
-            - name: Checkout repository
-              uses: actions/checkout@v3
+            - name: Checkout repo
+              uses: actions/checkout@v2
 
-            - name: Set up Node.js
-              uses: actions/setup-node@v3
+            - name: Setup Node
+              uses: actions/setup-node@v1
               with:
-                  node-version: "20"
+                  node-version: 16
 
             - name: Install dependencies
-              run: npm install
+              uses: bahmutov/npm-install@v1
 
             - name: Build project
               run: npm run build
 
-            - name: Deploy to deploy branch
-              run: |
-                  git config --global user.name 'github-actions[bot]'
-                  git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-                  git checkout --orphan deploy
-                  git --work-tree=dist add --all
-                  git --work-tree=dist commit -m 'Deploy'
-                  git push origin HEAD:deploy --force
+            - name: Upload production-ready build files
+              uses: actions/upload-artifact@v2
+              with:
+                  name: production-files
+                  path: ./dist
+
+    deploy:
+        name: Deploy
+        needs: build
+        runs-on: ubuntu-latest
+        if: github.ref == 'refs/heads/main'
+
+        steps:
+            - name: Download artifact
+              uses: actions/download-artifact@v2
+              with:
+                  name: production-files
+                  path: ./dist
+
+            - name: Deploy to GitHub Pages
+              uses: peaceiris/actions-gh-pages@v3
+              with:
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
+                  publish_dir: ./dist
