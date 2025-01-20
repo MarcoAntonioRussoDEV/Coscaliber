@@ -1,3 +1,5 @@
+import { GradientPicker } from "@/components/ui/color-picker";
+import { DrawerTrigger } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import {
     deleteLine,
@@ -8,6 +10,7 @@ import {
 } from "@/Redux/Redux-Slices/lineSlice";
 import { Eye, EyeOff, Palette, PaletteIcon, Pencil } from "lucide-react";
 import { useRef, useState } from "react";
+import { render } from "react-dom";
 import { useDispatch } from "react-redux";
 
 /**
@@ -29,7 +32,7 @@ import { useDispatch } from "react-redux";
  * @If `line.isReferenceLine` is false, the "Delete" action is included.
  */
 
-export const useLineActions = line => {
+export const useLineActions = (line, drawerRef) => {
     const dispatch = useDispatch();
     const colorRef = useRef(null);
     let lineActions = [
@@ -43,6 +46,11 @@ export const useLineActions = line => {
                 }
             },
             icon: <Pencil size={12} />,
+        },
+        {
+            label: "Change color",
+            action: () => drawerRef.current.click(),
+            icon: <Palette size={12} />,
         },
     ];
 

@@ -34,6 +34,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Tooltip } from "@/components/ui/tooltip";
 import { deleteAllLines, setImage } from "@/Redux/Redux-Slices/lineSlice";
+import { Drawer } from "@/components/ui/drawer";
 
 const AppSidebar = () => {
     const dispatch = useDispatch();
@@ -132,17 +133,19 @@ const AppSidebar = () => {
                             </Tooltip>
                         </TooltipProvider>
                     </SidebarGroup>
-                    <SidebarMenu>
-                        <SidebarGroupLabel>Linee</SidebarGroupLabel>
-                        <SidebarGroup className="flex flex-col gap-1">
-                            {lines.map(line => (
-                                <ElementRow
-                                    key={line.id}
-                                    line={line}
-                                />
-                            ))}
-                        </SidebarGroup>
-                    </SidebarMenu>
+                    <Drawer>
+                        <SidebarMenu>
+                            <SidebarGroupLabel>Linee</SidebarGroupLabel>
+                            <SidebarGroup className="flex flex-col gap-1">
+                                {lines.map(line => (
+                                    <ElementRow
+                                        key={line.id}
+                                        line={line}
+                                    />
+                                ))}
+                            </SidebarGroup>
+                        </SidebarMenu>
+                    </Drawer>
                 </SidebarContent>
                 <SidebarFooter>
                     <Label>

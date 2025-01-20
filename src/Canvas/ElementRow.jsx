@@ -28,9 +28,13 @@ import {
 import useLineActions from "@/Hooks/use-line-actions";
 import { Input } from "@/components/ui/input";
 import { GradientPicker } from "@/components/ui/color-picker";
+import { HexColorPicker } from "react-colorful";
+import { DrawerTrigger } from "@/components/ui/drawer";
+import ColorDrawer from "./ColorDrawer";
 
 const ElementRow = ({ line }) => {
     const [lineName, setLineName] = useState();
+    const drawerRef = useRef(null);
     const dispatch = useDispatch();
     const {
         utils: { selectedLineId },
@@ -63,71 +67,63 @@ const ElementRow = ({ line }) => {
         });
     }, [selectedLineId]);
 
-    const dropDownActions = useLineActions(line);
+    const dropDownActions = useLineActions(line, drawerRef);
 
     return (
-        <SidebarMenuItem>
-            <SidebarMenuButton
-                ref={refer}
-                variant={
-                    line.id === 1
-                        ? "striped"
-                        : line.id === selectedLineId
-                        ? "selected"
-                        : "outline"
-                }
-                onClick={() => handleClick(line.id)}
-                className={`fade-in ${line.isHidden ? "opacity-35" : ""}`}
+        <>
+            <DrawerTrigger
+                className="hidden"
+                ref={drawerRef}
             >
-                <div className="cursor-pointer text-white flex justify-between w-full items-center ">
-                    {/* <div
-                        style={{ backgroundColor: line.color }}
-                        className="flex min-h-[350px] justify-center p-10 items-center rounded transition-all"
-                    >
-                        <GradientPicker
-                            className="w-full truncate "
-                            background={line.color}
-                            setBackground={e => {
-                                dispatch(
-                                    setLineColor({
-                                        id: line.id,
-                                        color: "green",
-                                    })
-                                );
-                            }}
-                        />
-                    </div> */}
-                    <p className="truncate whitespace-nowrap text-xs">
-                        {lineName} -{" "}
-                        <span className="italic text-muted-foreground">
-                            {line.size} cm
-                        </span>
-                    </p>
-                </div>
-            </SidebarMenuButton>
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <SidebarMenuAction>
-                        <MoreHorizontal />
-                    </SidebarMenuAction>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                    side="right"
-                    align="start"
+                Open
+            </DrawerTrigger>
+            <SidebarMenuItem>
+                <SidebarMenuButton
+                    ref={refer}
+                    variant={
+                        line.id === 1
+                            ? "striped"
+                            : line.id === selectedLineId
+                            ? "selected"
+                            : "outline"
+                    }
+                    onClick={() => handleClick(line.id)}
+                    className={`fade-in ${line.isHidden ? "opacity-35" : ""}`}
                 >
-                    {dropDownActions.map(action => (
-                        <DropdownMenuItem
-                            key={action.label}
-                            onClick={action.action}
-                            className={`flex justify-between gap-2 cursor-pointer ${action.className}`}
-                        >
-                            <span>{action.label}</span>
-                            {action.icon}
-                        </DropdownMenuItem>
-                    ))}
-                </DropdownMenuContent>
-            </DropdownMenu>
-        </SidebarMenuItem>
+                    <div className="cursor-pointer text-white flex justify-between w-full items-center ">
+                        <p className="truncate whitespace-nowrap text-xs">
+                            {lineName} -{" "}
+                            <span className="italic text-muted-foreground">
+                                {line.size} cm
+                            </span>
+                        </p>
+                    </div>
+                </SidebarMenuButton>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <SidebarMenuAction>
+                            <MoreHorizontal />
+                        </SidebarMenuAction>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent
+                        side="right"
+                        align="start"
+                    >
+                        {dropDownActions.map(action => (
+                            <DropdownMenuItem
+                                key={action.label}
+                                onClick={action.action}
+                                className={`flex justify-between gap-2 cursor-pointer ${action.className}`}
+                            >
+                                <span>{action.label}</span>
+                                {action.icon}
+                            </DropdownMenuItem>
+                        ))}
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            </SidebarMenuItem>
+            <ColorDrawer {...line} />
+        </>
     );
 };
 
