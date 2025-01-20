@@ -7,11 +7,11 @@ function App() {
     return (
         <Routes>
             <Route
-                path="/"
+                path="/Cosplay_calculator"
                 element={<Homepage />}
             />
             <Route
-                path="/editor"
+                path="/Cosplay_calculator/editor"
                 element={<CanvasBoard />}
             />
         </Routes>
