@@ -39,6 +39,8 @@ const resetIsDrawing = state => {
 };
 
 const initialState = {
+    projectName: "project",
+    projectColor: "#fff",
     lines: [],
     referenceLine: null,
     bools: {
@@ -56,6 +58,10 @@ const initialState = {
     },
     utils: {
         selectedLineId: null,
+        // viewPort: {
+        //     width: 0,
+        //     height: 0,
+        // },
     },
     image: null,
 };
@@ -64,13 +70,22 @@ const lineSlice = createSlice({
     name: "lines",
     initialState,
     reducers: {
+        /* ! Project */
+        setProjectName: (state, action) => {
+            state.projectName = action.payload;
+        },
+        setProjectColor: (state, action) => {
+            state.projectColor = action.payload;
+        },
         /* ! ReferenceLine */
         setReferenceLineFrom(state) {
             state.bools.dots = 1;
-            const line = new LineModel();
+            const line = new LineModel(state.projectColor);
+            console.log("line: ", line);
             line.from = getMousePosition(state);
             line.to = null;
             state.referenceLine = line;
+            state.lines.push(line);
         },
         setReferenceLineTo(state) {
             state.bools.dots = 0;
@@ -82,8 +97,9 @@ const lineSlice = createSlice({
             state.referenceLine = line;
             state.referenceLine.size = state.calculated.referenceHeight;
             calculateRatio(state);
-            state.lines.push(line);
 
+            state.lines.pop();
+            state.lines.push(line);
             resetIsDrawing(state);
         },
         /* ! Lines */
@@ -101,7 +117,7 @@ const lineSlice = createSlice({
         },
         setLastLineFrom(state) {
             state.bools.dots = 1;
-            const line = new LineModel();
+            const line = new LineModel(state.projectColor);
             line.from = getMousePosition(state);
             line.to = null;
             state.lines.push(line);
@@ -188,10 +204,20 @@ const lineSlice = createSlice({
         setImage(state, action) {
             state.image = action.payload;
         },
+        /* ! Utils */
+        setState(state, action) {
+            console.log("action.payload: ", action.payload);
+            Object.assign(state, action.payload);
+        },
+        setViewPorts(state, action) {
+            state.utils.viewPort = action.payload;
+        },
     },
 });
 
 export const {
+    setProjectName,
+    setProjectColor,
     setCanvas,
     setReferenceLine,
     setReferenceLineFrom,
@@ -214,5 +240,7 @@ export const {
     setImage,
     setLineColor,
     setLineName,
+    setState,
+    setViewPorts,
 } = lineSlice.actions;
 export default lineSlice.reducer;

@@ -42,7 +42,9 @@ const AppSidebar = () => {
         calculated: { referenceHeight },
         lines,
         referenceLine,
+        projectName,
     } = useSelector(state => state.lines);
+    const STATE_JSON = useSelector(state => state.lines);
 
     const handleSetDrawing = () => {
         dispatch(setIsDrawing(true));
@@ -57,13 +59,16 @@ const AppSidebar = () => {
     };
 
     const handleDownloadJson = () => {
-        let downlodableLines = [referenceLine, ...lines];
-        const dataStr = JSON.stringify(downlodableLines, null, 2);
+        let downlodable_json = { ...STATE_JSON };
+        delete downlodable_json.mouse;
+        delete downlodable_json.bools;
+        delete downlodable_json.utils;
+        const dataStr = JSON.stringify(downlodable_json, null, 2);
         const blob = new Blob([dataStr], { type: "application/json" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
-        link.download = "lines.json";
+        link.download = `${projectName}.json`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);

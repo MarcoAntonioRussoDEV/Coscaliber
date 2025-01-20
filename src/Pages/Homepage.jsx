@@ -1,48 +1,24 @@
-import { SidebarProvider } from "@/components/ui/sidebar";
-import AppSidebar from "../Canvas/AppSidebar";
-import { useRef, useState } from "react";
-import { useSelector } from "react-redux";
-import Canvas from "@/Canvas/Canvas";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import NewProject from "./NewProject";
+import UploadProject from "./UploadProject";
 
 const Homepage = () => {
-    const ref = useRef(null);
-    const [isDragged, setIsDragged] = useState(false);
-
-    const {
-        mouse: { x: mouseX, y: mouseY },
-    } = useSelector(state => state.lines);
-
-    const handleClick = () => {
-        if (isDragged) {
-            setIsDragged(false);
-        } else {
-            setIsDragged(true);
-        }
-    };
-
-    const handleMove = e => {
-        if (isDragged) {
-            ref.current.style.left = `${e.clientX}px`;
-            ref.current.style.top = `${e.clientY}px`;
-        }
-    };
-
     return (
-        <SidebarProvider onMouseMove={handleMove}>
-            {/* <h1
-                ref={ref}
-                className={`text-4xl absolute z-20 ${
-                    isDragged ? "cursor-grabbing" : "cursor-grab"
-                }`}
-                onMouseDown={handleClick}
-                onMouseUp={handleClick}
-            >
-                Homepage
-            </h1> */}
-            <Canvas />
-            {/* <DrawingCanvas /> */}
-            <AppSidebar />
-        </SidebarProvider>
+        <Tabs
+            defaultValue="new-project"
+            className="w-[400px] mx-auto mt-auto h-screen flex flex-col justify-center items-center"
+        >
+            <TabsList>
+                <TabsTrigger value="new-project">New Project</TabsTrigger>
+                <TabsTrigger value="upload-project">Upload Project</TabsTrigger>
+            </TabsList>
+            <TabsContent value="new-project">
+                <NewProject />
+            </TabsContent>
+            <TabsContent value="upload-project">
+                <UploadProject />
+            </TabsContent>
+        </Tabs>
     );
 };
 

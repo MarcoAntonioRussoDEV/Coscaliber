@@ -20,6 +20,7 @@ const Canvas = () => {
         lines,
         referenceLine,
         image,
+        projectName,
     } = useSelector(state => state.lines);
     const dispatch = useDispatch();
 
@@ -67,6 +68,9 @@ const Canvas = () => {
             }`}
             onClick={handleDrawing}
         >
+            <p className="absolute top-1 w-full text-center font-bold text-xl uppercase">
+                {projectName}
+            </p>
             <SidebarTrigger className="end-0 top-1 absolute z-10 " />
 
             {image && (
