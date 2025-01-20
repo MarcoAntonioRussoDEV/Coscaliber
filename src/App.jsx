@@ -5,13 +5,13 @@ import { Routes, Route } from "react-router-dom";
 
 function App() {
     return (
-        <Routes>
+        <Routes basename="/Cosplay_calculator">
             <Route
-                path="/Cosplay_calculator"
+                path="/"
                 element={<Homepage />}
             />
             <Route
-                path="/Cosplay_calculator/editor"
+                path="/editor"
                 element={<CanvasBoard />}
             />
         </Routes>
