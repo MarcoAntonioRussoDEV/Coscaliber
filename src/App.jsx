@@ -4,8 +4,9 @@ import Homepage from "./Pages/Homepage";
 import { Routes, Route } from "react-router-dom";
 
 function App() {
+    console.log("location: ", location.pathname);
     return (
-        <Routes>
+        <Routes location={location}>
             <Route
                 path="/"
                 element={<Homepage />}
