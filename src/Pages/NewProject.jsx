@@ -19,11 +19,15 @@ import {
 } from "@/Redux/Redux-Slices/lineSlice";
 import { HexAlphaColorPicker } from "react-colorful";
 import HomepageCard from "@/components/custom/HomepageCard";
+import useTranslateCapitalize from "@/Hooks/use-translate-capitalize";
+import { useTranslation } from "react-i18next";
 
 const NewProject = () => {
     const dispatch = useDispatch();
     const [step, setStep] = useState(1);
     const inputRef = useRef(null);
+    const tc = useTranslateCapitalize("homepage");
+    const { t } = useTranslation("homepage");
 
     const handleProjectName = e => {
         dispatch(setProjectName(e.target.value));
@@ -79,7 +83,7 @@ const NewProject = () => {
 
     return (
         <HomepageCard
-            title={"Create project"}
+            title={t("createProject")}
             description={"Setup your project in a few steps"}
         >
             <CardContent>

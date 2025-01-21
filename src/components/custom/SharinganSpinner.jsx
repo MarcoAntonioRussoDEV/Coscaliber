@@ -6,21 +6,21 @@ const SharinganSpinner = ({ tomoe }) => {
         case 1:
             return (
                 <img
-                    src="/sharingan_one_tomoe.svg"
+                    src="./sharingan_one_tomoe.svg"
                     className="animate-spin "
                 />
             );
         case 2:
             return (
                 <img
-                    src="/sharingan_two_tomoe.svg"
+                    src="./sharingan_two_tomoe.svg"
                     className="animate-spin "
                 />
             );
         default:
             return (
                 <img
-                    src="/sharingan_three_tomoe.svg"
+                    src="./sharingan_three_tomoe.svg"
                     className="animate-spin "
                 />
             );

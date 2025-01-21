@@ -50,6 +50,8 @@
         "cosplay_calculator": "file:",
         "date-fns": "^3.6.0",
         "embla-carousel-react": "^8.5.2",
+        "i18next": "^24.2.1",
+        "i18next-browser-languagedetector": "^8.0.2",
         "input-otp": "^1.4.2",
         "lucide": "^0.471.0",
         "lucide-react": "^0.471.1",
@@ -61,6 +63,7 @@
         "react-day-picker": "^8.10.1",
         "react-dom": "^18.3.1",
         "react-hook-form": "^7.54.2",
+        "react-i18next": "^15.4.0",
         "react-redux": "^9.2.0",
         "react-resizable-panels": "^2.1.7",
         "react-router": "^7.1.3",
@@ -88,6 +91,7 @@
         "postcss": "^8.5.1",
         "tailwindcss": "^3.4.17",
         "view-shadcn-ui": "^2025.1.1",
-        "vite": "^6.0.5"
+        "vite": "^6.0.5",
+        "vite-plugin-html": "^3.2.2"
     }
 }

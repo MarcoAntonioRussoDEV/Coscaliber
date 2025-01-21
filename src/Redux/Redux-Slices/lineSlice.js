@@ -49,7 +49,7 @@ const initialState = {
         dots: 0,
     },
     calculated: {
-        referenceHeight: 170, //TODO: change to null
+        referenceHeight: null, //TODO: change to null
         pixelToCmRatio: null,
     },
     mouse: {
