@@ -10,6 +10,7 @@ const Line = ({ line }) => {
     const [isDragging, setIsDragging] = useState(false);
     const [draggedVertex, setDraggedVertex] = useState(null);
     const [dragPosition, setDragPosition] = useState(null);
+    const [magnifierPosition, setMagnifierPosition] = useState({ x: 0, y: 0 });
 
     const {
         calculated: { pixelToCmRatio, referenceHeight },
@@ -73,9 +74,9 @@ const Line = ({ line }) => {
         if (!isDragging || !draggedVertex) return;
 
         const newCoords = getRelativeCoordinates(e.clientX, e.clientY);
-        setDragPosition(newCoords); // Aggiorna immediatamente la posizione visuale
+        setDragPosition(newCoords);
+        setMagnifierPosition({ x: e.clientX, y: e.clientY });
 
-        // Throttle l'aggiornamento del Redux store
         requestAnimationFrame(() => {
             const updatedLine = { ...line };
             if (draggedVertex === "from") {
@@ -120,64 +121,113 @@ const Line = ({ line }) => {
     const isSelectionActive = selectedLineId !== null;
 
     return (
-        <svg
-            className={`absolute w-full h-full top-0 left-0 ${
-                isSelected ? "z-10" : "pointer-events-none"
-            }`}
-            preserveAspectRatio="none"
-        >
-            <line
-                x1={fromCoords.x}
-                y1={fromCoords.y}
-                x2={toCoords.x}
-                y2={toCoords.y}
-                stroke={isSelected ? "red" : color}
-                className={
-                    isSelected ? "pulse" : isSelectionActive ? "opacity-30" : ""
-                }
-                strokeWidth={borderWidth}
-                id={id}
-            />
-            {/* Vertici trascinabili - visibili e interattivi solo quando selezionati */}
-            {isSelected && (
-                <>
-                    <circle
-                        cx={fromCoords.x}
-                        cy={fromCoords.y}
-                        r="5"
-                        fill={color}
-                        className="cursor-move hover:r-6 transition-all"
-                        onMouseDown={e => handleVertexMouseDown(e, "from")}
-                    />
-                    {to && (
+        <>
+            <svg
+                className={`absolute w-full h-full top-0 left-0 ${
+                    isSelected ? "z-10" : "pointer-events-none"
+                }`}
+                preserveAspectRatio="none"
+            >
+                <line
+                    x1={fromCoords.x}
+                    y1={fromCoords.y}
+                    x2={toCoords.x}
+                    y2={toCoords.y}
+                    stroke={isSelected ? "red" : color}
+                    className={
+                        isSelected
+                            ? "pulse"
+                            : isSelectionActive
+                            ? "opacity-30"
+                            : ""
+                    }
+                    strokeWidth={borderWidth}
+                    id={id}
+                />
+                {/* Vertici trascinabili - visibili e interattivi solo quando selezionati */}
+                {isSelected && (
+                    <>
                         <circle
-                            cx={toCoords.x}
-                            cy={toCoords.y}
+                            cx={fromCoords.x}
+                            cy={fromCoords.y}
                             r="5"
                             fill={color}
                             className="cursor-move hover:r-6 transition-all"
-                            onMouseDown={e => handleVertexMouseDown(e, "to")}
+                            onMouseDown={e => handleVertexMouseDown(e, "from")}
                         />
-                    )}
-                </>
-            )}
-            <text
-                x={(fromCoords.x + toCoords.x) / 2 + 10}
-                y={(fromCoords.y + toCoords.y) / 2}
-                fill={color}
-                className={!isSelected && isSelectionActive && "opacity-30"}
-            >
-                {line.id === 1
-                    ? referenceHeight
-                    : line.to
-                    ? line.size
-                    : LineModel.fromSerializable(line).getDistanceInCm(
-                          pixelToCmRatio,
-                          mousePosition
-                      )}{" "}
-                cm
-            </text>
-        </svg>
+                        {to && (
+                            <circle
+                                cx={toCoords.x}
+                                cy={toCoords.y}
+                                r="5"
+                                fill={color}
+                                className="cursor-move hover:r-6 transition-all"
+                                onMouseDown={e =>
+                                    handleVertexMouseDown(e, "to")
+                                }
+                            />
+                        )}
+                    </>
+                )}
+                <text
+                    x={(fromCoords.x + toCoords.x) / 2 + 10}
+                    y={(fromCoords.y + toCoords.y) / 2}
+                    fill={color}
+                    className={!isSelected && isSelectionActive && "opacity-30"}
+                >
+                    {line.id === 1
+                        ? referenceHeight
+                        : line.to
+                        ? line.size
+                        : LineModel.fromSerializable(line).getDistanceInCm(
+                              pixelToCmRatio,
+                              mousePosition
+                          )}{" "}
+                    cm
+                </text>
+            </svg>
+
+            {isDragging &&
+                (() => {
+                    const img = getImageElement();
+                    if (!img) return null;
+                    const rect = img.getBoundingClientRect();
+
+                    // Calcola le distanze dai bordi
+                    const distLeft = magnifierPosition.x - rect.left;
+                    const distRight = rect.right - magnifierPosition.x;
+                    const distTop = magnifierPosition.y - rect.top;
+                    const distBottom = rect.bottom - magnifierPosition.y;
+
+                    // Calcola gli offset per la posizione della lente
+                    const offsetX = Math.min(50, distLeft, distRight);
+                    const offsetY = Math.min(50, distTop, distBottom);
+
+                    return (
+                        <div
+                            className="fixed pointer-events-none z-50"
+                            style={{
+                                left: magnifierPosition.x - offsetX,
+                                top: magnifierPosition.y - offsetY,
+                                width: "100px",
+                                height: "100px",
+                                borderRadius: "50%",
+                                border: "3px solid black",
+                                backgroundImage: `url(${image})`,
+                                backgroundRepeat: "no-repeat",
+                                backgroundSize: `${rect.width * 3}px ${
+                                    rect.height * 3
+                                }px`,
+                                backgroundPosition: `-${
+                                    (magnifierPosition.x - rect.left) * 3 - 50
+                                }px -${
+                                    (magnifierPosition.y - rect.top) * 3 - 50
+                                }px`,
+                            }}
+                        />
+                    );
+                })()}
+        </>
     );
 };
 

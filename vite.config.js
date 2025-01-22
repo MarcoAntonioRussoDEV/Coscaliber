@@ -29,4 +29,7 @@ export default defineConfig({
         https: false,
         port: 3000,
     },
+    define: {
+        "process.env": {},
+    },
 });

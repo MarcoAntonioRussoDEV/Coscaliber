@@ -11,6 +11,9 @@ import Line from "./Line";
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 
 const Canvas = () => {
+    const isDebug = JSON.parse(
+        import.meta.env.VITE_BORDER_DEBUG?.toLowerCase()
+    );
     const {
         bools: { isDrawing, dots, isEdit },
         mouse: { x: mouseX, y: mouseY },
@@ -76,12 +79,13 @@ const Canvas = () => {
                 className="end-0 top-1 absolute z-10 "
                 isOpen={openMobile}
             />
-
             {image && (
-                <div className="absolute inset-0 items-center justify-center flex p-10 w-fit m-auto pointer-events-none">
+                <div className="absolute inset-0 items-center justify-center flex p-20 w-fit m-auto pointer-events-none">
                     <img
                         src={image}
-                        className="reference-image opacity-30 w-full h-full object-contain rounded-xl  pointer-events-none"
+                        className={`reference-image opacity-30 w-full h-full object-contain rounded-xl pointer-events-none ${
+                            isDebug ? "border border-debug" : ""
+                        }`}
                     />
                 </div>
             )}
