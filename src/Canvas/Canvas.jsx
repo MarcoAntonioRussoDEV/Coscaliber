@@ -11,8 +11,8 @@ import {
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Line from "./Line";
-import LineModel from "@/Models/LineModel";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+
 const Canvas = () => {
     const {
         bools: { isDrawing, dots, isEdit },
@@ -63,7 +63,7 @@ const Canvas = () => {
 
     return (
         <div
-            className={`relative w-full h-screen  ${
+            className={`relative w-full h-screen border border-debug  ${
                 isDrawing ? "cursor-crosshair" : "cursor-auto"
             }`}
             onClick={handleDrawing}
@@ -77,7 +77,7 @@ const Canvas = () => {
                 <div className="absolute inset-0 items-center justify-center flex p-10 w-fit m-auto">
                     <img
                         src={image}
-                        className="opacity-30 w-full h-full object-contain rounded-xl"
+                        className="opacity-30 w-full h-full object-contain rounded-xl border border-debug"
                     />
                 </div>
             )}

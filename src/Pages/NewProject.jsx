@@ -49,7 +49,7 @@ const NewProject = () => {
     const stepOne = (
         <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="name">Name</Label>
+                <Label htmlFor="name">{tc("common:name")}</Label>
                 <Input
                     id="name"
                     placeholder="Name of your project"
@@ -83,7 +83,7 @@ const NewProject = () => {
 
     return (
         <HomepageCard
-            title={t("createProject")}
+            title={tc("createProject")}
             description={"Setup your project in a few steps"}
         >
             <CardContent>

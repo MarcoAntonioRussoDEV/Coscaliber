@@ -33,8 +33,8 @@ export default function Stepper({ className }) {
 
     const steps = {
         1: "espandendo il dominio",
-        2: "concentrando il chakra",
-        3: "attivando il sharingan",
+        2: "cercando il One Piece",
+        3: "attivando lo sharingan",
     };
 
     useEffect(() => {

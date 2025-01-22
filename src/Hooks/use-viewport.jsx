@@ -13,3 +13,5 @@ export const useViewPort = () => {
 
     return { VW: width, VH: height };
 };
+
+export default useViewPort;

@@ -50,6 +50,8 @@
         "cosplay_calculator": "file:",
         "date-fns": "^3.6.0",
         "embla-carousel-react": "^8.5.2",
+        "fabric": "^6.5.4",
+        "fabricjs-react": "^2.1.0",
         "i18next": "^24.2.1",
         "i18next-browser-languagedetector": "^8.0.2",
         "input-otp": "^1.4.2",

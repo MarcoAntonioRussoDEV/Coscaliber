@@ -13,8 +13,14 @@ const calculateRatio = state => {
 };
 
 const calculateDistanceInCm = (state, { from, to }) => {
-    const { x: x1, y: y1 } = from;
-    const { x: x2, y: y2 } = to;
+    const imageElement = document.querySelector("img");
+    if (!imageElement) return 0;
+
+    const imageRect = imageElement.getBoundingClientRect();
+    const x1 = (from.x * imageRect.width) / 100;
+    const y1 = (from.y * imageRect.height) / 100;
+    const x2 = (to.x * imageRect.width) / 100;
+    const y2 = (to.y * imageRect.height) / 100;
 
     const distanceInPx = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     const distanceInCm = state.calculated.pixelToCmRatio
@@ -23,8 +29,17 @@ const calculateDistanceInCm = (state, { from, to }) => {
     return distanceInCm.toFixed(2);
 };
 
-const getMousePosition = state => {
-    return { x: state.mouse.x, y: state.mouse.y };
+const getRelativeMousePosition = state => {
+    const imageElement = document.querySelector("img");
+    if (!imageElement) return { x: state.mouse.x, y: state.mouse.y };
+
+    const imageRect = imageElement.getBoundingClientRect();
+    const relativeX =
+        ((state.mouse.x - imageRect.left) / imageRect.width) * 100;
+    const relativeY =
+        ((state.mouse.y - imageRect.top) / imageRect.height) * 100;
+
+    return { x: relativeX, y: relativeY };
 };
 
 const calculateReferenceHeightOnEdit = state => {
@@ -49,7 +64,7 @@ const initialState = {
         dots: 0,
     },
     calculated: {
-        referenceHeight: null, //TODO: change to null
+        referenceHeight: 170, //TODO: change to null
         pixelToCmRatio: null,
     },
     mouse: {
@@ -58,10 +73,10 @@ const initialState = {
     },
     utils: {
         selectedLineId: null,
-        // viewPort: {
-        //     width: 0,
-        //     height: 0,
-        // },
+        viewPort: {
+            width: 0,
+            height: 0,
+        },
     },
     image: null,
 };
@@ -81,17 +96,16 @@ const lineSlice = createSlice({
         setReferenceLineFrom(state) {
             state.bools.dots = 1;
             const line = new LineModel(state.projectColor);
-            console.log("line: ", line);
-            line.from = getMousePosition(state);
+            line.from = getRelativeMousePosition(state);
             line.to = null;
-            state.referenceLine = line;
-            state.lines.push(line);
+            state.referenceLine = line.toSerializable();
+            state.lines.push(line.toSerializable());
         },
         setReferenceLineTo(state) {
             state.bools.dots = 0;
             const line = {
                 ...state.referenceLine,
-                to: getMousePosition(state),
+                to: getRelativeMousePosition(state),
             };
 
             state.referenceLine = line;
@@ -118,15 +132,15 @@ const lineSlice = createSlice({
         setLastLineFrom(state) {
             state.bools.dots = 1;
             const line = new LineModel(state.projectColor);
-            line.from = getMousePosition(state);
+            line.from = getRelativeMousePosition(state);
             line.to = null;
-            state.lines.push(line);
+            state.lines.push(line.toSerializable());
         },
         setLastLineTo(state) {
             state.bools.dots = 0;
             const line = {
                 ...state.lines.at(-1),
-                to: getMousePosition(state),
+                to: getRelativeMousePosition(state),
             };
             line.size = calculateDistanceInCm(state, line);
             state.lines.pop();
@@ -163,10 +177,6 @@ const lineSlice = createSlice({
                 line => line.id === action.payload.id
             );
             if (index !== -1) {
-                console.log(
-                    "state.lines[index].name: ",
-                    state.lines[index].name
-                );
                 state.lines[index].name = action.payload.name;
             }
         },
@@ -175,7 +185,6 @@ const lineSlice = createSlice({
             state.bools.isDrawing = action.payload;
         },
         setIsEdit(state, action) {
-            /* TODO Edit */
             state.bools.isEdit = action.payload;
         },
         /* ! Constants */

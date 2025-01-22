@@ -6,7 +6,7 @@ import { createHtmlPlugin } from "vite-plugin-html";
 
 // https://vite.dev/config/
 export default defineConfig({
-    base: process.env.VITE_BASENAME,
+    base: "./",
     plugins: [
         react(),
         createHtmlPlugin({

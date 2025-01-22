@@ -50,4 +50,14 @@ export default class Line {
         const distanceInPx = this.getDistanceInPx(mousePosition);
         return (distanceInPx / ratio).toFixed(2);
     }
+
+    static fromSerializable(serializable) {
+        const line = new Line(serializable.color);
+        Object.assign(line, serializable);
+        return line;
+    }
+
+    toSerializable() {
+        return { ...this };
+    }
 }
