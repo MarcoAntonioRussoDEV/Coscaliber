@@ -9,6 +9,7 @@ const Line = ({ line }) => {
     const imageRef = useRef(null);
     const [isDragging, setIsDragging] = useState(false);
     const [draggedVertex, setDraggedVertex] = useState(null);
+    const [dragPosition, setDragPosition] = useState(null);
 
     const {
         calculated: { pixelToCmRatio, referenceHeight },
@@ -16,9 +17,12 @@ const Line = ({ line }) => {
         image,
     } = useSelector(state => state.lines);
 
+    // Ottieni il riferimento all'immagine dal DOM
+    const getImageElement = () => document.querySelector(".reference-image");
+
     // Converti le coordinate assolute in coordinate relative all'immagine
     const getRelativeCoordinates = (absoluteX, absoluteY) => {
-        const imageElement = document.querySelector("img");
+        const imageElement = getImageElement();
         if (!imageElement) return { x: absoluteX, y: absoluteY };
 
         const imageRect = imageElement.getBoundingClientRect();
@@ -57,31 +61,30 @@ const Line = ({ line }) => {
         return () => window.removeEventListener("mousemove", handleMouseMove);
     }, []);
 
-    // Converti le coordinate dei punti
-    const fromCoords = getAbsoluteCoordinates(from.x, from.y);
-    const toCoords = to
-        ? getAbsoluteCoordinates(to.x, to.y)
-        : getAbsoluteCoordinates(mousePosition.x, mousePosition.y);
-
     const handleVertexMouseDown = (e, vertex) => {
         e.stopPropagation();
         setIsDragging(true);
         setDraggedVertex(vertex);
+        // Salva la posizione iniziale del drag
+        setDragPosition(getRelativeCoordinates(e.clientX, e.clientY));
     };
 
     const handleMouseMove = e => {
         if (!isDragging || !draggedVertex) return;
 
         const newCoords = getRelativeCoordinates(e.clientX, e.clientY);
-        const updatedLine = { ...line };
+        setDragPosition(newCoords); // Aggiorna immediatamente la posizione visuale
 
-        if (draggedVertex === "from") {
-            updatedLine.from = newCoords;
-        } else {
-            updatedLine.to = newCoords;
-        }
-
-        dispatch(updateLineVertices(updatedLine));
+        // Throttle l'aggiornamento del Redux store
+        requestAnimationFrame(() => {
+            const updatedLine = { ...line };
+            if (draggedVertex === "from") {
+                updatedLine.from = newCoords;
+            } else {
+                updatedLine.to = newCoords;
+            }
+            dispatch(updateLineVertices(updatedLine));
+        });
     };
 
     const handleMouseUp = () => {
@@ -100,9 +103,27 @@ const Line = ({ line }) => {
         }
     }, [isDragging, draggedVertex]);
 
+    // Usa dragPosition per il rendering se disponibile
+    const fromCoords =
+        isDragging && draggedVertex === "from" && dragPosition
+            ? getAbsoluteCoordinates(dragPosition.x, dragPosition.y)
+            : getAbsoluteCoordinates(from.x, from.y);
+
+    const toCoords =
+        isDragging && draggedVertex === "to" && dragPosition
+            ? getAbsoluteCoordinates(dragPosition.x, dragPosition.y)
+            : to
+            ? getAbsoluteCoordinates(to.x, to.y)
+            : getAbsoluteCoordinates(mousePosition.x, mousePosition.y);
+
+    const isSelected = selectedLineId === id;
+    const isSelectionActive = selectedLineId !== null;
+
     return (
         <svg
-            className="absolute w-full h-full top-0 left-0"
+            className={`absolute w-full h-full top-0 left-0 ${
+                isSelected ? "z-10" : "pointer-events-none"
+            }`}
             preserveAspectRatio="none"
         >
             <line
@@ -110,34 +131,41 @@ const Line = ({ line }) => {
                 y1={fromCoords.y}
                 x2={toCoords.x}
                 y2={toCoords.y}
-                stroke={selectedLineId === id ? "red" : color}
-                className={selectedLineId === id ? "pulse" : ""}
+                stroke={isSelected ? "red" : color}
+                className={
+                    isSelected ? "pulse" : isSelectionActive ? "opacity-30" : ""
+                }
                 strokeWidth={borderWidth}
                 id={id}
             />
-            {/* Vertici trascinabili */}
-            <circle
-                cx={fromCoords.x}
-                cy={fromCoords.y}
-                r="5"
-                fill={color}
-                className="cursor-move hover:r-6 transition-all"
-                onMouseDown={e => handleVertexMouseDown(e, "from")}
-            />
-            {to && (
-                <circle
-                    cx={toCoords.x}
-                    cy={toCoords.y}
-                    r="5"
-                    fill={color}
-                    className="cursor-move hover:r-6 transition-all"
-                    onMouseDown={e => handleVertexMouseDown(e, "to")}
-                />
+            {/* Vertici trascinabili - visibili e interattivi solo quando selezionati */}
+            {isSelected && (
+                <>
+                    <circle
+                        cx={fromCoords.x}
+                        cy={fromCoords.y}
+                        r="5"
+                        fill={color}
+                        className="cursor-move hover:r-6 transition-all"
+                        onMouseDown={e => handleVertexMouseDown(e, "from")}
+                    />
+                    {to && (
+                        <circle
+                            cx={toCoords.x}
+                            cy={toCoords.y}
+                            r="5"
+                            fill={color}
+                            className="cursor-move hover:r-6 transition-all"
+                            onMouseDown={e => handleVertexMouseDown(e, "to")}
+                        />
+                    )}
+                </>
             )}
             <text
                 x={(fromCoords.x + toCoords.x) / 2 + 10}
                 y={(fromCoords.y + toCoords.y) / 2}
                 fill={color}
+                className={!isSelected && isSelectionActive && "opacity-30"}
             >
                 {line.id === 1
                     ? referenceHeight

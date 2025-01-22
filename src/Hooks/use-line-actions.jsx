@@ -8,7 +8,14 @@ import {
     setLineName,
     showLine,
 } from "@/Redux/Redux-Slices/lineSlice";
-import { Eye, EyeOff, Palette, PaletteIcon, Pencil } from "lucide-react";
+import {
+    Eye,
+    EyeOff,
+    Palette,
+    PaletteIcon,
+    Pencil,
+    Trash2,
+} from "lucide-react";
 import { useRef, useState } from "react";
 import { render } from "react-dom";
 import { useDispatch } from "react-redux";
@@ -32,7 +39,7 @@ import { useDispatch } from "react-redux";
  * @If `line.isReferenceLine` is false, the "Delete" action is included.
  */
 
-export const useLineActions = (line, drawerRef) => {
+export const useLineActions = (line, drawerRef, alertDialogRef) => {
     const dispatch = useDispatch();
     const colorRef = useRef(null);
     let lineActions = [
@@ -51,6 +58,13 @@ export const useLineActions = (line, drawerRef) => {
             label: "Change color",
             action: () => drawerRef.current.click(),
             icon: <Palette size={12} />,
+        },
+        {
+            label: "Delete",
+            action: () => {
+                dispatch(deleteLine(line));
+            },
+            icon: <Trash2 size={12} />,
         },
     ];
 
@@ -72,15 +86,19 @@ export const useLineActions = (line, drawerRef) => {
         });
     }
 
-    if (!line.isReferenceLine) {
-        lineActions.push({
-            label: "Delete",
-            action: () => {
-                dispatch(deleteLine(line));
-            },
-            icon: <EyeOff size={12} />,
-        });
-    }
+    lineActions.push({
+        label: "Delete",
+        action: () => {
+            if (line.id === 1) {
+                // Se è la linea di riferimento, apri l'AlertDialog
+                alertDialogRef.current.click();
+            } else {
+                dispatch(deleteLine(line.id));
+            }
+        },
+        icon: <Trash2 size={12} />,
+        className: "text-destructive",
+    });
 
     return lineActions;
 };

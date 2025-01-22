@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import ElementRow from "./ElementRow";
 import { Button } from "@/components/ui/button";
 import {
@@ -43,11 +43,15 @@ const AppSidebar = () => {
         lines,
         referenceLine,
         projectName,
+        image,
     } = useSelector(state => state.lines);
     const STATE_JSON = useSelector(state => state.lines);
+    const alertDialogRef = useRef(null);
 
     const handleSetDrawing = () => {
-        dispatch(setIsDrawing(true));
+        if (image) {
+            dispatch(setIsDrawing(true));
+        }
     };
 
     const handleHeightChange = e => {
@@ -87,6 +91,10 @@ const AppSidebar = () => {
 
     return (
         <AlertDialog>
+            <AlertDialogTrigger
+                ref={alertDialogRef}
+                className="hidden"
+            />
             <Sidebar
                 side="right"
                 variant="floating"
@@ -116,7 +124,7 @@ const AppSidebar = () => {
                             <Tooltip>
                                 <TooltipTrigger className="cursor-not-allowed">
                                     <Button
-                                        disabled={!referenceHeight}
+                                        disabled={!referenceHeight || !image}
                                         onClick={handleSetDrawing}
                                         className={`w-full ${
                                             !referenceHeight &&
@@ -146,6 +154,7 @@ const AppSidebar = () => {
                                     <ElementRow
                                         key={line.id}
                                         line={line}
+                                        alertDialogRef={alertDialogRef}
                                     />
                                 ))}
                             </SidebarGroup>

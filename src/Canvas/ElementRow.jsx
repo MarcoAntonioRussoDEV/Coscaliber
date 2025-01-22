@@ -32,7 +32,7 @@ import { HexColorPicker } from "react-colorful";
 import { DrawerTrigger } from "@/components/ui/drawer";
 import ColorDrawer from "./ColorDrawer";
 
-const ElementRow = ({ line }) => {
+const ElementRow = ({ line, alertDialogRef }) => {
     const [lineName, setLineName] = useState();
     const drawerRef = useRef(null);
     const dispatch = useDispatch();
@@ -55,19 +55,17 @@ const ElementRow = ({ line }) => {
     const refer = useRef(null);
 
     useEffect(() => {
-        const setSeletedLine = () => {
-            dispatch(setSelectedLineId(line.id));
-        };
-
-        refer.current.addEventListener("mouseover", setSeletedLine);
-
-        refer.current.addEventListener("mouseout", () => {
-            dispatch(setSelectedLineId(null));
-            refer.current.addEventListener("mouseover", setSeletedLine);
-        });
+        // const setSeletedLine = () => {
+        //     dispatch(setSelectedLineId(line.id));
+        // };
+        // refer.current.addEventListener("mouseover", setSeletedLine);
+        // refer.current.addEventListener("mouseout", () => {
+        //     dispatch(setSelectedLineId(null));
+        //     refer.current.addEventListener("mouseover", setSeletedLine);
+        // });
     }, [selectedLineId]);
 
-    const dropDownActions = useLineActions(line, drawerRef);
+    const dropDownActions = useLineActions(line, drawerRef, alertDialogRef);
 
     return (
         <>
@@ -81,11 +79,7 @@ const ElementRow = ({ line }) => {
                 <SidebarMenuButton
                     ref={refer}
                     variant={
-                        line.id === 1
-                            ? "striped"
-                            : line.id === selectedLineId
-                            ? "selected"
-                            : "outline"
+                        line.id === selectedLineId ? "selected" : "outline"
                     }
                     onClick={() => handleClick(line.id)}
                     className={`fade-in ${line.isHidden ? "opacity-35" : ""}`}

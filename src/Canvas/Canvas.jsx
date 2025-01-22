@@ -44,7 +44,7 @@ const Canvas = () => {
     };
 
     const handleDrawing = () => {
-        if (isDrawing) {
+        if (isDrawing && image) {
             if (!referenceLine || !referenceLine.to) {
                 initializeReferenceLine();
             } else {
@@ -71,10 +71,10 @@ const Canvas = () => {
             <SidebarTrigger className="end-0 top-1 absolute z-10 " />
 
             {image && (
-                <div className="absolute inset-0 items-center justify-center flex p-10 w-fit m-auto">
+                <div className="absolute inset-0 items-center justify-center flex p-10 w-fit m-auto pointer-events-none">
                     <img
                         src={image}
-                        className="opacity-30 w-full h-full object-contain rounded-xl border border-debug"
+                        className="reference-image opacity-30 w-full h-full object-contain rounded-xl border border-debug pointer-events-none"
                     />
                 </div>
             )}

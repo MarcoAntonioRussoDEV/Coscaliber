@@ -116,7 +116,9 @@ const lineSlice = createSlice({
             );
         },
         deleteAllLines(state) {
+            const image = state.image;
             Object.assign(state, initialState);
+            state.image = image;
             LineModel.id = 0;
         },
         setSelectedLineId(state, action) {
@@ -223,17 +225,24 @@ const lineSlice = createSlice({
                     to: updatedLine.to,
                 };
 
-                // Se è la linea di riferimento, aggiorna anche quella
+                // Se è la linea di riferimento, aggiorna anche quella e ricalcola tutte le linee
                 if (updatedLine.id === 1) {
                     state.referenceLine = state.lines[index];
                     calculateRatio(state);
-                }
 
-                // Ricalcola la dimensione della linea
-                state.lines[index].size = calculateDistanceInCm(
-                    state,
-                    state.lines[index]
-                );
+                    // Ricalcola le dimensioni di tutte le linee con il nuovo ratio
+                    state.lines.forEach((line, i) => {
+                        if (line.to && i !== index) {
+                            line.size = calculateDistanceInCm(state, line);
+                        }
+                    });
+                } else {
+                    // Ricalcola solo la dimensione della linea modificata
+                    state.lines[index].size = calculateDistanceInCm(
+                        state,
+                        state.lines[index]
+                    );
+                }
             }
         },
     },

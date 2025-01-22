@@ -54,6 +54,7 @@ export default class Line {
     static fromSerializable(serializable) {
         const line = new Line(serializable.color);
         Object.assign(line, serializable);
+        Line.id--;
         return line;
     }
 
