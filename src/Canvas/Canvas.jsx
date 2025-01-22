@@ -12,7 +12,7 @@ import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 
 const Canvas = () => {
     const isDebug = JSON.parse(
-        import.meta.env.VITE_BORDER_DEBUG?.toLowerCase()
+        import.meta.env.VITE_BORDER_DEBUG?.toLowerCase() || "false"
     );
     const {
         bools: { isDrawing, dots, isEdit },
