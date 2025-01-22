@@ -1,10 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import LineModel from "@/models/LineModel";
+import { updateLineVertices } from "@/Redux/Redux-Slices/lineSlice";
 
 const Line = ({ line }) => {
+    const dispatch = useDispatch();
     const { from, to, color, borderWidth, id } = line;
     const imageRef = useRef(null);
+    const [isDragging, setIsDragging] = useState(false);
+    const [draggedVertex, setDraggedVertex] = useState(null);
+
     const {
         calculated: { pixelToCmRatio, referenceHeight },
         utils: { selectedLineId },
@@ -58,6 +63,43 @@ const Line = ({ line }) => {
         ? getAbsoluteCoordinates(to.x, to.y)
         : getAbsoluteCoordinates(mousePosition.x, mousePosition.y);
 
+    const handleVertexMouseDown = (e, vertex) => {
+        e.stopPropagation();
+        setIsDragging(true);
+        setDraggedVertex(vertex);
+    };
+
+    const handleMouseMove = e => {
+        if (!isDragging || !draggedVertex) return;
+
+        const newCoords = getRelativeCoordinates(e.clientX, e.clientY);
+        const updatedLine = { ...line };
+
+        if (draggedVertex === "from") {
+            updatedLine.from = newCoords;
+        } else {
+            updatedLine.to = newCoords;
+        }
+
+        dispatch(updateLineVertices(updatedLine));
+    };
+
+    const handleMouseUp = () => {
+        setIsDragging(false);
+        setDraggedVertex(null);
+    };
+
+    useEffect(() => {
+        if (isDragging) {
+            window.addEventListener("mousemove", handleMouseMove);
+            window.addEventListener("mouseup", handleMouseUp);
+            return () => {
+                window.removeEventListener("mousemove", handleMouseMove);
+                window.removeEventListener("mouseup", handleMouseUp);
+            };
+        }
+    }, [isDragging, draggedVertex]);
+
     return (
         <svg
             className="absolute w-full h-full top-0 left-0"
@@ -73,6 +115,25 @@ const Line = ({ line }) => {
                 strokeWidth={borderWidth}
                 id={id}
             />
+            {/* Vertici trascinabili */}
+            <circle
+                cx={fromCoords.x}
+                cy={fromCoords.y}
+                r="5"
+                fill={color}
+                className="cursor-move hover:r-6 transition-all"
+                onMouseDown={e => handleVertexMouseDown(e, "from")}
+            />
+            {to && (
+                <circle
+                    cx={toCoords.x}
+                    cy={toCoords.y}
+                    r="5"
+                    fill={color}
+                    className="cursor-move hover:r-6 transition-all"
+                    onMouseDown={e => handleVertexMouseDown(e, "to")}
+                />
+            )}
             <text
                 x={(fromCoords.x + toCoords.x) / 2 + 10}
                 y={(fromCoords.y + toCoords.y) / 2}
@@ -84,7 +145,7 @@ const Line = ({ line }) => {
                     ? line.size
                     : LineModel.fromSerializable(line).getDistanceInCm(
                           pixelToCmRatio,
-                          toCoords
+                          mousePosition
                       )}{" "}
                 cm
             </text>

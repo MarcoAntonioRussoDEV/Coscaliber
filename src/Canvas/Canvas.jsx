@@ -1,7 +1,4 @@
 import {
-    addNewLine,
-    setDots,
-    setIsDrawing,
     setLastLineFrom,
     setLastLineTo,
     setMousePosition,
@@ -56,10 +53,10 @@ const Canvas = () => {
         }
     };
 
-    useEffect(() => {
-        console.log("lines: ", lines);
-        console.log("referenceLine: ", referenceLine);
-    }, [lines, referenceLine]);
+    // useEffect(() => {
+    //     console.log("lines: ", lines);
+    //     console.log("referenceLine: ", referenceLine);
+    // }, [lines, referenceLine]);
 
     return (
         <div

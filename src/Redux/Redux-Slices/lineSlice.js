@@ -13,14 +13,8 @@ const calculateRatio = state => {
 };
 
 const calculateDistanceInCm = (state, { from, to }) => {
-    const imageElement = document.querySelector("img");
-    if (!imageElement) return 0;
-
-    const imageRect = imageElement.getBoundingClientRect();
-    const x1 = (from.x * imageRect.width) / 100;
-    const y1 = (from.y * imageRect.height) / 100;
-    const x2 = (to.x * imageRect.width) / 100;
-    const y2 = (to.y * imageRect.height) / 100;
+    const { x: x1, y: y1 } = from;
+    const { x: x2, y: y2 } = to;
 
     const distanceInPx = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     const distanceInCm = state.calculated.pixelToCmRatio
@@ -60,7 +54,6 @@ const initialState = {
     referenceLine: null,
     bools: {
         isDrawing: false,
-        isEdit: false,
         dots: 0,
     },
     calculated: {
@@ -184,9 +177,6 @@ const lineSlice = createSlice({
         setIsDrawing(state, action) {
             state.bools.isDrawing = action.payload;
         },
-        setIsEdit(state, action) {
-            state.bools.isEdit = action.payload;
-        },
         /* ! Constants */
         setReferenceHeight(state, action) {
             state.calculated.referenceHeight = action.payload;
@@ -215,11 +205,36 @@ const lineSlice = createSlice({
         },
         /* ! Utils */
         setState(state, action) {
-            console.log("action.payload: ", action.payload);
             Object.assign(state, action.payload);
         },
         setViewPorts(state, action) {
             state.utils.viewPort = action.payload;
+        },
+        updateLineVertices(state, action) {
+            const updatedLine = action.payload;
+            const index = state.lines.findIndex(
+                line => line.id === updatedLine.id
+            );
+
+            if (index !== -1) {
+                state.lines[index] = {
+                    ...state.lines[index],
+                    from: updatedLine.from,
+                    to: updatedLine.to,
+                };
+
+                // Se è la linea di riferimento, aggiorna anche quella
+                if (updatedLine.id === 1) {
+                    state.referenceLine = state.lines[index];
+                    calculateRatio(state);
+                }
+
+                // Ricalcola la dimensione della linea
+                state.lines[index].size = calculateDistanceInCm(
+                    state,
+                    state.lines[index]
+                );
+            }
         },
     },
 });
@@ -227,17 +242,13 @@ const lineSlice = createSlice({
 export const {
     setProjectName,
     setProjectColor,
-    setCanvas,
-    setReferenceLine,
     setReferenceLineFrom,
     setReferenceLineTo,
-    addNewLine,
     deleteLine,
     deleteAllLines,
     hideLine,
     showLine,
     setIsDrawing,
-    setIsEdit,
     setReferenceHeight,
     setDots,
     setMouseX,
@@ -251,5 +262,6 @@ export const {
     setLineName,
     setState,
     setViewPorts,
+    updateLineVertices,
 } = lineSlice.actions;
 export default lineSlice.reducer;
