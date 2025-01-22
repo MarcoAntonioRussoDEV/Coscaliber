@@ -12,22 +12,29 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Stepper from "@/components/custom/Stepper";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
     setProjectColor,
     setProjectName,
+    setTutorial,
 } from "@/Redux/Redux-Slices/lineSlice";
 import { HexAlphaColorPicker } from "react-colorful";
 import HomepageCard from "@/components/custom/HomepageCard";
 import useTranslateCapitalize from "@/Hooks/use-translate-capitalize";
 import { useTranslation } from "react-i18next";
+import { Switch } from "@/components/ui/switch";
+import {
+    ArrowRightIcon,
+    ChevronLeftIcon,
+    ChevronRightIcon,
+} from "lucide-react";
 
 const NewProject = () => {
     const dispatch = useDispatch();
     const [step, setStep] = useState(1);
     const inputRef = useRef(null);
     const tc = useTranslateCapitalize("homepage");
-    const { t } = useTranslation("homepage");
+    const { tutorial } = useSelector(state => state.lines);
 
     const handleProjectName = e => {
         dispatch(setProjectName(e.target.value));
@@ -36,6 +43,9 @@ const NewProject = () => {
         dispatch(setProjectColor(color));
     };
 
+    const handlePreviousStep = () => {
+        setStep(old => (old - 1 < 1 ? 1 : old - 1));
+    };
     const handleNextStep = () => {
         setStep(old => old + 1);
     };
@@ -44,6 +54,10 @@ const NewProject = () => {
         if (e.key === "Enter") {
             handleNextStep();
         }
+    };
+
+    const handleTutorial = value => {
+        dispatch(setTutorial(value));
     };
 
     const stepOne = (
@@ -75,6 +89,19 @@ const NewProject = () => {
     );
 
     const stepThree = (
+        <div className="grid w-full items-center gap-4">
+            <div className="flex flex-col space-y-1.5">
+                <Label>Vuoi vedere il tutorial?</Label>
+
+                <Switch
+                    checked={tutorial}
+                    onCheckedChange={handleTutorial}
+                />
+            </div>
+        </div>
+    );
+
+    const stepFour = (
         <Stepper
             step={step}
             setStep={setStep}
@@ -87,16 +114,24 @@ const NewProject = () => {
             description={"Setup your project in a few steps"}
         >
             <CardContent>
-                {step === 1 ? stepOne : step === 2 ? stepTwo : stepThree}
+                {[stepOne, stepTwo, stepThree, stepFour][step - 1] || stepFour}
             </CardContent>
-            {step >= 3 || (
+            {step >= 4 || (
                 <CardFooter className="flex justify-between">
                     <Button
-                        type="submit"
+                        variant="outline"
+                        onClick={handlePreviousStep}
+                        className={step <= 1 && "hidden"}
+                    >
+                        <ChevronLeftIcon className="w-4 h-4" />
+                        Previous
+                    </Button>
+                    <Button
                         className="ms-auto"
                         onClick={handleNextStep}
                     >
                         Next
+                        <ChevronRightIcon className="w-4 h-4" />
                     </Button>
                 </CardFooter>
             )}

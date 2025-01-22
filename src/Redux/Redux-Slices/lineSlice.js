@@ -50,6 +50,7 @@ const resetIsDrawing = state => {
 const initialState = {
     projectName: "project",
     projectColor: "#fff",
+    tutorial: true,
     lines: [],
     referenceLine: null,
     bools: {
@@ -245,6 +246,9 @@ const lineSlice = createSlice({
                 }
             }
         },
+        setTutorial(state, action) {
+            state.tutorial = action.payload;
+        },
     },
 });
 
@@ -272,5 +276,6 @@ export const {
     setState,
     setViewPorts,
     updateLineVertices,
+    setTutorial,
 } = lineSlice.actions;
 export default lineSlice.reducer;

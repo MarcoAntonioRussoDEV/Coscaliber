@@ -10,6 +10,7 @@ import {
     SidebarHeader,
     SidebarMenu,
     SidebarMenuButton,
+    useSidebar,
 } from "@/components/ui/sidebar";
 import {
     AlertDialog,
@@ -47,10 +48,14 @@ const AppSidebar = () => {
     } = useSelector(state => state.lines);
     const STATE_JSON = useSelector(state => state.lines);
     const alertDialogRef = useRef(null);
-
+    const { isMobile, setOpenMobile } = useSidebar();
     const handleSetDrawing = () => {
         if (image) {
             dispatch(setIsDrawing(true));
+            console.log("isMobile: ", isMobile);
+            if (isMobile) {
+                setOpenMobile(false);
+            }
         }
     };
 
@@ -185,7 +190,7 @@ const AppSidebar = () => {
                     </AlertDialogTrigger>
                 </SidebarFooter>
             </Sidebar>
-            {/* //? MODAL */}
+            {/* ? MODAL */}
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>

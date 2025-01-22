@@ -26,7 +26,7 @@ i18n.use(LanguageDetector)
     .init({
         resources,
         fallbackLng: "en",
-        debug: true,
+        debug: false,
         ns: ["common", "homepage", "canvas"], // Definisci i namespace
         defaultNS: "common", // Namespace di default
         backend: {

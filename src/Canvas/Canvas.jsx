@@ -8,7 +8,7 @@ import {
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Line from "./Line";
-import { SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 
 const Canvas = () => {
     const {
@@ -20,12 +20,16 @@ const Canvas = () => {
         projectName,
     } = useSelector(state => state.lines);
     const dispatch = useDispatch();
+    const { isMobile, openMobile, setOpenMobile } = useSidebar();
 
     useEffect(() => {
         const handleMouseMove = e => {
             dispatch(setMousePosition({ x: e.clientX, y: e.clientY }));
         };
         window.addEventListener("mousemove", handleMouseMove);
+
+        setOpenMobile(true);
+
         return () => {
             window.removeEventListener("mousemove", handleMouseMove);
         };
@@ -60,7 +64,7 @@ const Canvas = () => {
 
     return (
         <div
-            className={`relative w-full h-screen border border-debug  ${
+            className={`relative w-full h-screen   ${
                 isDrawing ? "cursor-crosshair" : "cursor-auto"
             }`}
             onClick={handleDrawing}
@@ -68,13 +72,16 @@ const Canvas = () => {
             <p className="absolute top-1 w-full text-center font-bold text-xl uppercase">
                 {projectName}
             </p>
-            <SidebarTrigger className="end-0 top-1 absolute z-10 " />
+            <SidebarTrigger
+                className="end-0 top-1 absolute z-10 "
+                isOpen={openMobile}
+            />
 
             {image && (
                 <div className="absolute inset-0 items-center justify-center flex p-10 w-fit m-auto pointer-events-none">
                     <img
                         src={image}
-                        className="reference-image opacity-30 w-full h-full object-contain rounded-xl border border-debug pointer-events-none"
+                        className="reference-image opacity-30 w-full h-full object-contain rounded-xl  pointer-events-none"
                     />
                 </div>
             )}
