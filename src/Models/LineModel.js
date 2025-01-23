@@ -5,7 +5,7 @@ export default class Line {
     from;
     to;
     color;
-    borderWith;
+    borderWidth;
     size;
     isHidden = false;
     isReferenceLine;
@@ -17,7 +17,7 @@ export default class Line {
         this.id = Line.id;
         this.isReferenceLine = Line.id === 1;
         this.color = color;
-        this.borderWith = 2;
+        this.borderWidth = 2;
     }
 
     setFrom(from) {
