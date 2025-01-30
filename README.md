@@ -1,12 +1,13 @@
 # CoScaler
 
-<div style="width: 100%; height: 100px; border-bottom: 1px solid rgba(70,70,70,1); margin-bottom: 10px">
+<div style="width: 100%; height: 100px; border-bottom: 1px solid rgba(70,70,70,1);">
     <img src="public/coscaler_negativo.svg" style="object-fit: cover; width: 100%; height: auto" />
 </div>
 
 <div style="width: 100%; height: 100px;">
     <img src="public/MARDEV_LOGO.svg" style="object-fit: cover; width: 100%; height: auto" />
 </div>
+
 ## English
 
 Web app to calculate proportional lines on an uploaded reference image, given dimensions in centimeters and a reference line. Key features:
