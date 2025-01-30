@@ -4,9 +4,6 @@
     <img src="public/coscaler_negativo.svg" style="object-fit: cover; width: 100%; height: auto" />
 </div>
 
-<div style="width: 100%; height: 100px;">
-    <img src="public/MARDEV_LOGO.svg" style="object-fit: cover; width: 100%; height: auto" />
-</div>
 
 ## English
 
@@ -25,3 +22,7 @@ Web app per calcolare linee in proporzione su un’immagine di riferimento caric
 -   (TODO) Cambiare lo spessore della linea.
 -   Salvare il progetto come file JSON.
 -   Spostare le linee disegnate con una lente di ingrandimento.
+
+<div style="width: 100%; height: 100px;">
+    <img src="public/MARDEV_LOGO.svg" style="object-fit: cover; width: 100%; height: auto" />
+</div>
