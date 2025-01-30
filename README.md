@@ -5,8 +5,9 @@
 </div>
 
 <div style="width: 100%; height: 100px;">
-    <img src="public/MARDEV_LOGO.svg" style="object-fit: cover; width: 100%; height: auto" />
+    <img src="public/SVG_GRADIENT_WHITEsvg.svg" style="object-fit: cover; width: 100%; height: auto" />
 </div>
+
 ## English
 
 Web app to calculate proportional lines on an uploaded reference image, given dimensions in centimeters and a reference line. Key features:
