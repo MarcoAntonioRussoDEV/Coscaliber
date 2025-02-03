@@ -1,12 +1,6 @@
-# CoScaler
+# Coscaliber
 
-<div style="width: 100%; height: 100px; border-bottom: 1px solid rgba(70,70,70,1);">
-    <img src="public/coscaler_negativo.svg" style="object-fit: cover; width: 100%; height: auto" />
-</div>
-
-<div style="width: 100%; height: 100px;">
-    <img src="public/SVG_GRADIENT_WHITEsvg.svg" style="object-fit: cover; width: 100%; height: auto" />
-</div>
+![logo](public/coscaliber_white.svg)
 
 ## English
 
@@ -26,6 +20,6 @@ Web app per calcolare linee in proporzione su un’immagine di riferimento caric
 -   Salvare il progetto come file JSON.
 -   Spostare le linee disegnate con una lente di ingrandimento.
 
-<div style="width: 100%; height: 100px;">
-    <img src="public/MARDEV_LOGO.svg" style="object-fit: cover; width: 100%; height: auto" />
-</div>
+#
+
+![signature](public/SVG_GRADIENT_WHITEsvg.svg)
