@@ -1,3 +1,12 @@
 {
-    "createProject": "crea progetto"
+    "createProject": "crea progetto",
+    "newProject": "Nuovo Progetto",
+    "uploadProject": "Carica Progetto",
+    "selectLocale": "Seleziona lingua",
+    "projectNamePlaceholder": "Nome del tuo progetto",
+    "projectSetupDescription": "Configura il tuo progetto in pochi passaggi",
+    "defaultLineColor": "Colore linea predefinito",
+    "showTutorial": "Vuoi vedere il tutorial?",
+    "uploadDescription": "Carica qui il tuo progetto.",
+    "uploadFile": "carica file JSON"
 }

@@ -66,7 +66,7 @@ const NewProject = () => {
                 <Label htmlFor="name">{tc("common:name")}</Label>
                 <Input
                     id="name"
-                    placeholder="Name of your project"
+                    placeholder={tc("homepage:projectNamePlaceholder")}
                     ref={inputRef}
                     onChange={handleProjectName}
                     onKeyDown={handleKeyDown}
@@ -78,7 +78,7 @@ const NewProject = () => {
     const stepTwo = (
         <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5 items-center">
-                <Label>Default line color</Label>
+                <Label>{tc("homepage:defaultLineColor")}</Label>
                 <HexAlphaColorPicker
                     color="#fff"
                     onChange={handleProjectColor}
@@ -91,7 +91,7 @@ const NewProject = () => {
     const stepThree = (
         <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
-                <Label>Vuoi vedere il tutorial?</Label>
+                <Label>{tc("homepage:showTutorial")}</Label>
 
                 <Switch
                     checked={tutorial}
@@ -110,8 +110,8 @@ const NewProject = () => {
 
     return (
         <HomepageCard
-            title={tc("createProject")}
-            description={"Setup your project in a few steps"}
+            title="homepage:createProject"
+            description="homepage:projectSetupDescription"
         >
             <CardContent>
                 {[stepOne, stepTwo, stepThree, stepFour][step - 1] || stepFour}
@@ -124,13 +124,13 @@ const NewProject = () => {
                         className={step <= 1 && "hidden"}
                     >
                         <ChevronLeftIcon className="w-4 h-4" />
-                        Previous
+                        {tc("common:previous")}
                     </Button>
                     <Button
                         className="ms-auto"
                         onClick={handleNextStep}
                     >
-                        Next
+                        {tc("common:next")}
                         <ChevronRightIcon className="w-4 h-4" />
                     </Button>
                 </CardFooter>

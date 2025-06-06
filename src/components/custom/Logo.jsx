@@ -43,7 +43,7 @@ const Logo = () => {
             x="0"
             y="0"
             version="1.1"
-            viewBox="0 0 400 400"
+            // viewBox="0 0 400 400"
         >
             <linearGradient
                 id="SVGID_1_"

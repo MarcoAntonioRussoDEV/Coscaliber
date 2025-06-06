@@ -1,0 +1,18 @@
+{
+    "name": "name",
+    "close": "schließen",
+    "open": "öffnen",
+    "cancel": "abbrechen",
+    "delete": "löschen",
+    "next": "weiter",
+    "previous": "zurück",
+    "save": "speichern",
+    "upload": "hochladen",
+    "download": "herunterladen",
+    "hide": "ausblenden",
+    "show": "anzeigen",
+    "edit": "bearbeiten",
+    "color": "farbe",
+    "tutorial": "tutorial",
+    "confirm": "bestätigen"
+}

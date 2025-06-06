@@ -1,22 +1,32 @@
 import { createSlice } from "@reduxjs/toolkit";
 import LineModel from "@/Models/LineModel";
+import { calculateDistanceInPx } from "@/lib/utils";
 
 const calculateRatio = state => {
     const {
-        from: { x: x1, y: y1 },
-        to: { x: x2, y: y2 },
+        absoluteFrom: { x: x1, y: y1 },
+        absoluteTo: { x: x2, y: y2 },
     } = state.referenceLine;
 
-    const distanceInPx = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    const imageElement = document.querySelector("img");
+    if (!imageElement) return;
+
+    const imageRect = imageElement.getBoundingClientRect();
+    const imageWidthCm =
+        state.calculated.referenceHeight * (imageRect.width / imageRect.height);
+
+    const distanceInPx = calculateDistanceInPx(x1, y1, x2, y2);
     const distanceInCm = state.calculated.referenceHeight;
     state.calculated.pixelToCmRatio = distanceInPx / distanceInCm;
+    state.calculated.pixelToCmRatioWidth = imageRect.width / imageWidthCm;
 };
 
-const calculateDistanceInCm = (state, { from, to }) => {
-    const { x: x1, y: y1 } = from;
-    const { x: x2, y: y2 } = to;
+const calculateDistanceInCm = (state, { absoluteFrom, absoluteTo }) => {
+    const { x: x1, y: y1 } = absoluteFrom;
+    const { x: x2, y: y2 } = absoluteTo;
 
-    const distanceInPx = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    const distanceInPx = calculateDistanceInPx(x1, y1, x2, y2);
+    console.log("REDUX", absoluteFrom, absoluteTo);
     const distanceInCm = state.calculated.pixelToCmRatio
         ? distanceInPx / state.calculated.pixelToCmRatio
         : 0;
@@ -34,6 +44,17 @@ const getRelativeMousePosition = state => {
         ((state.mouse.y - imageRect.top) / imageRect.height) * 100;
 
     return { x: relativeX, y: relativeY };
+};
+
+const getAbsoluteMousePosition = state => {
+    const imageElement = document.querySelector("img");
+    if (!imageElement) return { x: state.mouse.x, y: state.mouse.y };
+
+    const imageRect = imageElement.getBoundingClientRect();
+    const absoluteX = state.mouse.x - imageRect.left;
+    const absoluteY = state.mouse.y - imageRect.top;
+
+    return { x: absoluteX, y: absoluteY };
 };
 
 const calculateReferenceHeightOnEdit = state => {
@@ -58,7 +79,7 @@ const initialState = {
         dots: 0,
     },
     calculated: {
-        referenceHeight: 170, //TODO: change to null
+        referenceHeight: null, //TODO: change to null
         pixelToCmRatio: null,
     },
     mouse: {
@@ -72,7 +93,7 @@ const initialState = {
             height: 0,
         },
     },
-    image: null,
+    image: null, //TODO: change to null
 };
 
 const lineSlice = createSlice({
@@ -91,6 +112,7 @@ const lineSlice = createSlice({
             state.bools.dots = 1;
             const line = new LineModel(state.projectColor);
             line.from = getRelativeMousePosition(state);
+            line.absoluteFrom = getAbsoluteMousePosition(state);
             line.to = null;
             state.referenceLine = line.toSerializable();
             state.lines.push(line.toSerializable());
@@ -100,6 +122,7 @@ const lineSlice = createSlice({
             const line = {
                 ...state.referenceLine,
                 to: getRelativeMousePosition(state),
+                absoluteTo: getAbsoluteMousePosition(state),
             };
 
             state.referenceLine = line;
@@ -129,6 +152,7 @@ const lineSlice = createSlice({
             state.bools.dots = 1;
             const line = new LineModel(state.projectColor);
             line.from = getRelativeMousePosition(state);
+            line.absoluteFrom = getAbsoluteMousePosition(state);
             line.to = null;
             state.lines.push(line.toSerializable());
         },
@@ -137,6 +161,7 @@ const lineSlice = createSlice({
             const line = {
                 ...state.lines.at(-1),
                 to: getRelativeMousePosition(state),
+                absoluteTo: getAbsoluteMousePosition(state),
             };
             line.size = calculateDistanceInCm(state, line);
             state.lines.pop();

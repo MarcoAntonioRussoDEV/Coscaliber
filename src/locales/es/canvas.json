@@ -1,0 +1,21 @@
+{
+    "lines": "Líneas",
+    "referenceHeight": "Altura de referencia",
+    "addMeasurement": "Añadir medición",
+    "loadImage": "Cargar imagen",
+    "downloadJSON": "Descargar JSON",
+    "deleteAllLines": "Eliminar todas las líneas",
+    "addReferenceHeightFirst": "Añade primero la altura de referencia",
+    "deleteAllConfirmTitle": "¿Estás seguro?",
+    "deleteAllConfirmDescription": "Esta acción eliminará todas las líneas incluida la altura de referencia.",
+    "rename": "Renombrar",
+    "changeColor": "Cambiar color",
+    "delete": "Eliminar",
+    "confirmDeleteTitle": "¿Eliminar línea de referencia?",
+    "confirmDeleteDescription": "Eliminar la línea de referencia eliminará todas las mediciones calculadas.",
+    "loading": {
+        "expandingDomain": "expandiendo el dominio",
+        "searchingOnePiece": "buscando el One Piece",
+        "activatingSharingan": "activando el sharingan"
+    }
+}

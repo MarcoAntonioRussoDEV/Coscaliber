@@ -18,13 +18,18 @@ import {
     setProjectName,
 } from "@/Redux/Redux-Slices/lineSlice";
 import { HexAlphaColorPicker } from "react-colorful";
+import { useTranslation } from "react-i18next";
+import useTranslateCapitalize from "@/Hooks/use-translate-capitalize";
+
 const HomepageCard = ({ children, title, description }) => {
+    const tc = useTranslateCapitalize();
+
     return (
         <Animator className="relative">
             <Card className="w-96">
                 <CardHeader>
-                    <CardTitle>{title}</CardTitle>
-                    <CardDescription>{description}</CardDescription>
+                    <CardTitle>{tc(title)}</CardTitle>
+                    <CardDescription>{tc(description)}</CardDescription>
                 </CardHeader>
                 {children}
             </Card>

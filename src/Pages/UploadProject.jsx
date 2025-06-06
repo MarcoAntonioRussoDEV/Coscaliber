@@ -3,8 +3,10 @@ import { Button } from "@/components/ui/button";
 import { CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import useTranslateCapitalize from "@/Hooks/use-translate-capitalize";
 import { setState } from "@/Redux/Redux-Slices/lineSlice";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 
@@ -12,6 +14,7 @@ const UploadProject = () => {
     const [file, setFile] = React.useState(null);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const tc = useTranslateCapitalize();
 
     const handleJsonUpload = () => {
         if (!file) return;
@@ -30,15 +33,15 @@ const UploadProject = () => {
     };
     return (
         <HomepageCard
-            title="Upload Project"
-            description={"Upload your project here."}
+            title="homepage:uploadProject"
+            description="homepage:uploadDescription"
         >
             <CardContent>
                 <div className="grid w-full items-center gap-4">
                     <div className="flex flex-col space-y-1.5">
-                        <Label>File</Label>
+                        <Label>{tc("common:name")}</Label>
                         <Input
-                            placeholder="upload JSON file"
+                            placeholder={tc("homepage:uploadFile")}
                             type="file"
                             onChange={e => setFile(e.target.files[0])}
                         />
@@ -51,7 +54,7 @@ const UploadProject = () => {
                     onClick={handleJsonUpload}
                     disabled={!file}
                 >
-                    Upload
+                    {tc("common:upload")}
                 </Button>
             </CardFooter>
         </HomepageCard>

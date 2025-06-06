@@ -7,6 +7,15 @@ import canvasTranslationIT from "/src/locales/it/canvas.json";
 import commonTtanslationEN from "/src/locales/en/common.json";
 import homepageTranslationEN from "/src/locales/en/homepage.json";
 import canvasTranslationEN from "/src/locales/en/canvas.json";
+import commonTtanslationDE from "/src/locales/de/common.json";
+import homepageTranslationDE from "/src/locales/de/homepage.json";
+import canvasTranslationDE from "/src/locales/de/canvas.json";
+import commonTtanslationES from "/src/locales/es/common.json";
+import homepageTranslationES from "/src/locales/es/homepage.json";
+import canvasTranslationES from "/src/locales/es/canvas.json";
+import commonTtanslationFR from "/src/locales/fr/common.json";
+import homepageTranslationFR from "/src/locales/fr/homepage.json";
+import canvasTranslationFR from "/src/locales/fr/canvas.json";
 
 const resources = {
     en: {
@@ -19,6 +28,21 @@ const resources = {
         homepage: homepageTranslationIT,
         canvas: canvasTranslationIT,
     },
+    de: {
+        common: commonTtanslationDE,
+        homepage: homepageTranslationDE,
+        canvas: canvasTranslationDE,
+    },
+    es: {
+        common: commonTtanslationES,
+        homepage: homepageTranslationES,
+        canvas: canvasTranslationES,
+    },
+    fr: {
+        common: commonTtanslationFR,
+        homepage: homepageTranslationFR,
+        canvas: canvasTranslationFR,
+    },
 };
 
 i18n.use(LanguageDetector)
@@ -26,7 +50,13 @@ i18n.use(LanguageDetector)
     .init({
         resources,
         fallbackLng: "en",
-        debug: false,
+        debug: true,
+        saveMissing: true,
+        missingKeyHandler: (lng, ns, key, fallbackValue) => {
+            console.error(
+                `Chiave di traduzione mancante: '${key}' nel namespace '${ns}' per la lingua '${lng}'`
+            );
+        },
         ns: ["common", "homepage", "canvas"], // Definisci i namespace
         defaultNS: "common", // Namespace di default
         backend: {

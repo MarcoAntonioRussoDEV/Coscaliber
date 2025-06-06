@@ -1,3 +1,12 @@
 {
-    "createProject": "create project"
+    "createProject": "create project",
+    "newProject": "New Project",
+    "uploadProject": "Upload Project",
+    "selectLocale": "Select language",
+    "projectNamePlaceholder": "Name of your project",
+    "projectSetupDescription": "Setup your project in a few steps",
+    "defaultLineColor": "Default line color",
+    "showTutorial": "Do you want to see the tutorial?",
+    "uploadDescription": "Upload your project here.",
+    "uploadFile": "upload JSON file"
 }

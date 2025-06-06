@@ -86,6 +86,7 @@ const Canvas = () => {
                         className={`reference-image opacity-30 w-full h-full object-contain rounded-xl pointer-events-none ${
                             isDebug ? "border border-debug" : ""
                         }`}
+                        id="canvas"
                     />
                 </div>
             )}

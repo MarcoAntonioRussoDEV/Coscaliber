@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import LineModel from "@/models/LineModel";
 import { updateLineVertices } from "@/Redux/Redux-Slices/lineSlice";
+import { Spinner } from "@/components/ui/spinner";
 
 const Line = ({ line }) => {
     const dispatch = useDispatch();
@@ -170,8 +171,8 @@ const Line = ({ line }) => {
                     </>
                 )}
                 <text
-                    x={(fromCoords.x + toCoords.x) / 2 + 10}
-                    y={(fromCoords.y + toCoords.y) / 2}
+                    x={(fromCoords.x + toCoords.x) / 2 - 20}
+                    y={(fromCoords.y + toCoords.y) / 2 - 10}
                     fill={color}
                     className={!isSelected && isSelectionActive && "opacity-30"}
                 >
@@ -179,11 +180,8 @@ const Line = ({ line }) => {
                         ? referenceHeight
                         : line.to
                         ? line.size
-                        : LineModel.fromSerializable(line).getDistanceInCm(
-                              pixelToCmRatio,
-                              mousePosition
-                          )}{" "}
-                    cm
+                        : "calcolando..."}{" "}
+                    {line.to && "cm"}
                 </text>
             </svg>
 

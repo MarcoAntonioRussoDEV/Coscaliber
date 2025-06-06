@@ -31,8 +31,10 @@ import { GradientPicker } from "@/components/ui/color-picker";
 import { HexColorPicker } from "react-colorful";
 import { DrawerTrigger } from "@/components/ui/drawer";
 import ColorDrawer from "./ColorDrawer";
+import { useTranslation } from "react-i18next";
 
 const ElementRow = ({ line, alertDialogRef }) => {
+    const { t } = useTranslation();
     const [lineName, setLineName] = useState();
     const drawerRef = useRef(null);
     const dispatch = useDispatch();
@@ -105,18 +107,20 @@ const ElementRow = ({ line, alertDialogRef }) => {
                     >
                         {dropDownActions.map(action => (
                             <DropdownMenuItem
-                                key={action.label}
+                                key={action.id}
                                 onClick={action.action}
-                                className={`flex justify-between gap-2 cursor-pointer ${action.className}`}
+                                className="flex justify-between"
                             >
-                                <span>{action.label}</span>
-                                {action.icon}
+                                <div className="flex gap-2 items-center">
+                                    <action.icon className="w-4 h-4" />
+                                    <p>{t(action.text)}</p>
+                                </div>
+                                <div className="ms-8">{action.shortcut}</div>
                             </DropdownMenuItem>
                         ))}
                     </DropdownMenuContent>
                 </DropdownMenu>
             </SidebarMenuItem>
-            <ColorDrawer {...line} />
         </>
     );
 };

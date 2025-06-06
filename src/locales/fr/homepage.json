@@ -1,0 +1,12 @@
+{
+    "createProject": "créer un projet",
+    "newProject": "Nouveau Projet",
+    "uploadProject": "Téléverser Projet",
+    "selectLocale": "Sélectionner la langue",
+    "projectNamePlaceholder": "Nom de votre projet",
+    "projectSetupDescription": "Configurez votre projet en quelques étapes",
+    "defaultLineColor": "Couleur de ligne par défaut",
+    "showTutorial": "Voulez-vous voir le tutoriel?",
+    "uploadDescription": "Téléversez votre projet ici.",
+    "uploadFile": "téléverser fichier JSON"
+}

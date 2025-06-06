@@ -19,6 +19,7 @@ import {
 import { useRef, useState } from "react";
 import { render } from "react-dom";
 import { useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 /**
  * Custom hook that generates a list of actions for a given line.
@@ -30,64 +31,61 @@ import { useDispatch } from "react-redux";
  * @returns {Array} An array of action objects for the line.
  *
  * Each action object contains:
- * @property {string} label - The label of the action.
+ * @property {string} id - The unique identifier for the action.
+ * @property {string} text - The translation key for the action.
  * @property {Function} action - The function to dispatch the action.
- * @property {JSX.Element} icon - The icon representing the action.
- *
- * @If `line.isHidden` is true, the "Show" action is included.
- * @If `line.isHidden` is false, the "Hide" action is included.
- * @If `line.isReferenceLine` is false, the "Delete" action is included.
+ * @property {React.Component} icon - The icon component for the action.
  */
 
 export const useLineActions = (line, drawerRef, alertDialogRef) => {
     const dispatch = useDispatch();
+    const { t } = useTranslation();
     const colorRef = useRef(null);
+
     let lineActions = [
         {
-            label: "Rename",
+            id: "rename",
+            text: "canvas:rename",
             action: () => {
-                const newName = prompt("Enter the line name");
+                const newName = prompt(t("canvas:rename"));
                 if (newName) {
                     const updatedLine = { id: line.id, name: newName };
                     dispatch(setLineName(updatedLine));
                 }
             },
-            icon: <Pencil size={12} />,
+            icon: Pencil,
         },
         {
-            label: "Change color",
+            id: "change-color",
+            text: "canvas:changeColor",
             action: () => drawerRef.current.click(),
-            icon: <Palette size={12} />,
-        },
-        {
-            label: "Delete",
-            action: () => {
-                dispatch(deleteLine(line));
-            },
-            icon: <Trash2 size={12} />,
+            icon: Palette,
         },
     ];
 
     if (line.isHidden) {
         lineActions.push({
-            label: "Show",
+            id: "show",
+            text: "common:show",
             action: () => {
                 dispatch(showLine(line));
             },
-            icon: <Eye size={12} />,
+            icon: Eye,
         });
     } else {
         lineActions.push({
-            label: "Hide",
+            id: "hide",
+            text: "common:hide",
             action: () => {
                 dispatch(hideLine(line));
             },
-            icon: <EyeOff size={12} />,
+            icon: EyeOff,
         });
     }
 
     lineActions.push({
-        label: "Delete",
+        id: "delete",
+        text: "common:delete",
         action: () => {
             if (line.id === 1) {
                 // Se è la linea di riferimento, apri l'AlertDialog
@@ -96,8 +94,8 @@ export const useLineActions = (line, drawerRef, alertDialogRef) => {
                 dispatch(deleteLine(line.id));
             }
         },
-        icon: <Trash2 size={12} />,
-        className: "text-destructive",
+        icon: Trash2,
+        shortcut: "Del",
     });
 
     return lineActions;

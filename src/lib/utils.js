@@ -44,3 +44,15 @@ export function getMouseResponsiveCoords(from, to, mousePosition) {
         y2: scaledY2,
     };
 }
+
+export const convertCmToPx = (cm, dpi = 96) => {
+    return (cm * dpi) / 2.54;
+};
+
+export const convertPxToCm = (px, dpi = 96) => {
+    return (px * 2.54) / dpi;
+};
+
+export const calculateDistanceInPx = (x1, y1, x2, y2) => {
+    return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+};
