@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import LineModel from "@/models/LineModel";
+// import LineModel from "@/models/LineModel";
 import { updateLineVertices } from "@/Redux/Redux-Slices/lineSlice";
 import { Spinner } from "@/components/ui/spinner";
 
