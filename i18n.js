@@ -49,9 +49,16 @@ i18n.use(LanguageDetector)
     .use(initReactI18next)
     .init({
         resources,
+        lng: "en", // Imposta inglese come lingua di default
         fallbackLng: "en",
         debug: true,
         saveMissing: true,
+        detection: {
+            // Configurazione del language detector
+            order: ["localStorage", "navigator"], // Prima controlla localStorage, poi il browser
+            caches: ["localStorage"], // Salva la preferenza in localStorage
+            lookupLocalStorage: "i18nextLng", // Chiave per localStorage
+        },
         missingKeyHandler: (lng, ns, key, fallbackValue) => {
             console.error(
                 `Chiave di traduzione mancante: '${key}' nel namespace '${ns}' per la lingua '${lng}'`

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Globe, Check, ChevronUp, ChevronDown } from "lucide-react";
+import { Check, ChevronUp, ChevronDown } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -11,14 +11,26 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import "flag-icons/css/flag-icons.min.css";
 
 const languageOptions = [
-    { value: "en", label: "English" },
-    { value: "it", label: "Italiano" },
-    { value: "de", label: "Deutsch" },
-    { value: "es", label: "Español" },
-    { value: "fr", label: "Français" },
+    { value: "en", label: "English", countryCode: "gb" },
+    { value: "it", label: "Italiano", countryCode: "it" },
+    { value: "de", label: "Deutsch", countryCode: "de" },
+    { value: "es", label: "Español", countryCode: "es" },
+    { value: "fr", label: "Français", countryCode: "fr" },
 ];
+
+const FlagIcon = ({ countryCode, className = "" }) => {
+    return (
+        <span
+            className={cn(
+                `fi fi-${countryCode} text-lg leading-none rounded-sm inline-block`,
+                className
+            )}
+        />
+    );
+};
 
 const LanguageSelector = () => {
     const { i18n, t } = useTranslation();
@@ -31,7 +43,6 @@ const LanguageSelector = () => {
     const handleLanguageChange = value => {
         i18n.changeLanguage(value);
     };
-
     return (
         <div className="fixed bottom-4 left-4 z-50">
             <DropdownMenu
@@ -41,10 +52,13 @@ const LanguageSelector = () => {
                 <DropdownMenuTrigger asChild>
                     <Button
                         variant="outline"
-                        size="sm"
-                        className="flex items-center gap-2 rounded-full shadow-md border-opacity-50 hover:shadow-lg transition-all bg-background/85 backdrop-blur-md"
+                        size="lg"
+                        className="flex items-center gap-2 rounded-full shadow-md hover:shadow-lg transition-all backdrop-blur-md"
                     >
-                        <Globe className="w-4 h-4 text-primary" />
+                        <FlagIcon
+                            countryCode={currentLanguage.countryCode}
+                            className="w-5 h-4"
+                        />
                         <span className="text-xs font-medium hidden sm:inline">
                             {currentLanguage.label}
                         </span>
@@ -73,7 +87,13 @@ const LanguageSelector = () => {
                                 option.value === i18n.language && "font-medium"
                             )}
                         >
-                            {option.label}
+                            <div className="flex items-center gap-3">
+                                <FlagIcon
+                                    countryCode={option.countryCode}
+                                    className="w-5 h-4"
+                                />
+                                <span>{option.label}</span>
+                            </div>
                             {option.value === i18n.language && (
                                 <Check className="h-4 w-4 text-primary" />
                             )}
