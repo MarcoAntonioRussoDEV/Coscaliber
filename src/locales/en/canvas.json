@@ -1,1 +1,11 @@
-{}
+{
+    "reference_height": "Reference height",
+    "add_mesurement": "Add measurement",
+    "lines": "Lines",
+    "upload_image": "Upload image",
+    "download_project": "Download project",
+    "delete_all_lines": "Delete all lines",
+    "insert_a_reference_height_before": "Add a reference height first",
+    "alert_delete_all_lines": "Are you sure you want to delete all lines?",
+    "disclamer_delete_all_lines": "This action cannot be undone, all lines will be deleted."
+}

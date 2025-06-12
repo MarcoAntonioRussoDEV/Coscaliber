@@ -1,1 +1,11 @@
-{}
+{
+    "reference_height": "Altezza di riferimento",
+    "add_mesurement": "Aggiungi misurazione",
+    "lines": "Linee",
+    "upload_image": "Carica immagine",
+    "download_project": "Scarica progetto",
+    "delete_all_lines": "Elimina tutte le linee",
+    "insert_a_reference_height_before": "Aggiungi prima un'altezza di riferimento",
+    "alert_delete_all_lines": "Sei sicuro di voler eliminare tutte le linee?",
+    "disclamer_delete_all_lines": "Questa azione non può essere annullata, tutte le linee verranno cancellate."
+}

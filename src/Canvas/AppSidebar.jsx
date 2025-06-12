@@ -36,9 +36,11 @@ import {
 import { Tooltip } from "@/components/ui/tooltip";
 import { deleteAllLines, setImage } from "@/Redux/Redux-Slices/lineSlice";
 import { Drawer } from "@/components/ui/drawer";
+import useTranslateCapitalize from "@/Hooks/use-translate-capitalize";
 
 const AppSidebar = () => {
     const dispatch = useDispatch();
+    const tc = useTranslateCapitalize();
     const {
         calculated: { referenceHeight, pixelToCmRatio },
         lines,
@@ -110,7 +112,7 @@ const AppSidebar = () => {
                     <SidebarGroup className="flex flex-col gap-4">
                         <Label className="flex flex-col gap-2">
                             <p className="text-start px-1 ">
-                                Altezza di riferimento
+                                {tc("canvas:reference_height")}{" "}
                             </p>
                             <Input
                                 type="number"
@@ -136,7 +138,7 @@ const AppSidebar = () => {
                                             "cursor-not-allowed"
                                         }`}
                                     >
-                                        Aggiungi misurazione
+                                        {tc("canvas:add_mesurement")}
                                     </Button>
                                 </TooltipTrigger>
                                 {!referenceHeight && (
@@ -153,7 +155,9 @@ const AppSidebar = () => {
                     </SidebarGroup>
                     <Drawer>
                         <SidebarMenu>
-                            <SidebarGroupLabel>Linee</SidebarGroupLabel>
+                            <SidebarGroupLabel>
+                                {tc("canvas:lines")}
+                            </SidebarGroupLabel>
                             <SidebarGroup className="flex flex-col gap-1">
                                 {lines.map(line => (
                                     <ElementRow
@@ -168,7 +172,7 @@ const AppSidebar = () => {
                 </SidebarContent>
                 <SidebarFooter>
                     <Label>
-                        <p className="p-1">Carica Immagine</p>
+                        <p className="p-1">{tc("canvas:upload_image")}</p>
                         <Input
                             type="file"
                             className="bg-background upload-image-step"
@@ -179,12 +183,12 @@ const AppSidebar = () => {
                         onClick={handleDownloadJson}
                         className="w-full"
                     >
-                        Scarica JSON
+                        {tc("canvas:download_project")}
                     </Button>
                     <AlertDialogTrigger asChild>
                         <SidebarMenuButton variant="destructive">
                             <p className="text-center w-full">
-                                Cancella tutte le linee
+                                {tc("canvas:delete_all_lines")}
                             </p>
                         </SidebarMenuButton>
                     </AlertDialogTrigger>
@@ -194,17 +198,16 @@ const AppSidebar = () => {
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>
-                        Sei sicuro di voler cancellare tutte le linee?
+                        {tc("canvas:alert_delete_all_lines")}
                     </AlertDialogTitle>
                     <AlertDialogDescription>
-                        Questa azione non può essere annullata, tutte le linee
-                        verranno cancellate.
+                        {tc("canvas:disclamer_delete_all_lines")}
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                    <AlertDialogCancel>Annulla</AlertDialogCancel>
+                    <AlertDialogCancel>{tc("common:cancel")}</AlertDialogCancel>
                     <AlertDialogAction onClick={handleDeleteAllLines}>
-                        Conferma
+                        {tc("common:delete")}
                     </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>

@@ -70,8 +70,8 @@ const resetIsDrawing = state => {
 
 const initialState = {
     projectName: "project",
-    projectColor: "#fff",
-    tutorial: true,
+    projectColor: "#000",
+    tutorial: false,
     lines: [],
     referenceLine: null,
     bools: {

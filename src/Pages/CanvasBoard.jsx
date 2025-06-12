@@ -21,19 +21,21 @@ const steps = [
 const CanvasBoard = () => {
     const { tutorial } = useSelector(state => state.lines);
     return (
-        <SidebarProvider>
-            <div className={`w-96 p-2`}>
-                <LogoFull />
-            </div>
-            {tutorial && (
-                <Joyride
-                    steps={steps}
-                    continuous={true}
-                />
-            )}
-            <Canvas />
-            <AppSidebar />
-        </SidebarProvider>
+        <div className="bg-gray-100">
+            <SidebarProvider>
+                <div className={`w-96 p-2`}>
+                    <LogoFull />
+                </div>
+                {tutorial && (
+                    <Joyride
+                        steps={steps}
+                        continuous={true}
+                    />
+                )}
+                <Canvas />
+                <AppSidebar />
+            </SidebarProvider>
+        </div>
     );
 };
 
