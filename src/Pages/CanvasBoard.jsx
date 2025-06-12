@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import Canvas from "@/Canvas/Canvas";
 import { motion } from "motion/react";
+import LogoFull from "@/components/custom/LogoFull";
 
 const steps = [
     {
@@ -21,7 +22,15 @@ const CanvasBoard = () => {
     const { tutorial } = useSelector(state => state.lines);
     return (
         <SidebarProvider>
-            {tutorial && <Joyride steps={steps} />}
+            <div className={`w-96 p-2`}>
+                <LogoFull />
+            </div>
+            {tutorial && (
+                <Joyride
+                    steps={steps}
+                    continuous={true}
+                />
+            )}
             <Canvas />
             <AppSidebar />
         </SidebarProvider>
