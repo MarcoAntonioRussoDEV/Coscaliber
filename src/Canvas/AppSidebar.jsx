@@ -36,10 +36,8 @@ import {
 import { Tooltip } from "@/components/ui/tooltip";
 import { deleteAllLines, setImage } from "@/Redux/Redux-Slices/lineSlice";
 import { Drawer } from "@/components/ui/drawer";
-import { useTranslation } from "react-i18next";
 
 const AppSidebar = () => {
-    const { t } = useTranslation();
     const dispatch = useDispatch();
     const {
         calculated: { referenceHeight, pixelToCmRatio },
@@ -105,14 +103,14 @@ const AppSidebar = () => {
                 side="right"
                 variant="floating"
             >
-                <SidebarHeader className=" text-center uppercase font-bold">
+                <SidebarHeader className=" text-center">
                     {import.meta.env.VITE_APP_NAME}
                 </SidebarHeader>
                 <SidebarContent className="">
                     <SidebarGroup className="flex flex-col gap-4">
                         <Label className="flex flex-col gap-2">
-                            <p className="text-start px-1">
-                                {t("canvas:referenceHeight")}
+                            <p className="text-start px-1 ">
+                                Altezza di riferimento
                             </p>
                             <Input
                                 type="number"
@@ -124,6 +122,7 @@ const AppSidebar = () => {
                                         ? referenceHeight
                                         : ""
                                 }
+                                className="reference-height-step"
                             />
                         </Label>
                         <TooltipProvider delayDuration={100}>
@@ -137,7 +136,7 @@ const AppSidebar = () => {
                                             "cursor-not-allowed"
                                         }`}
                                     >
-                                        {t("canvas:addMeasurement")}
+                                        Aggiungi misurazione
                                     </Button>
                                 </TooltipTrigger>
                                 {!referenceHeight && (
@@ -146,7 +145,7 @@ const AppSidebar = () => {
                                         sideOffset={12}
                                         className="text-center bg-secondary text-secondary-foreground p-2 border shadow"
                                     >
-                                        {t("canvas:addReferenceHeightFirst")}
+                                        Aggiungi prima un'altezza di riferimento
                                     </TooltipContent>
                                 )}
                             </Tooltip>
@@ -154,9 +153,7 @@ const AppSidebar = () => {
                     </SidebarGroup>
                     <Drawer>
                         <SidebarMenu>
-                            <SidebarGroupLabel>
-                                {t("canvas:lines")}
-                            </SidebarGroupLabel>
+                            <SidebarGroupLabel>Linee</SidebarGroupLabel>
                             <SidebarGroup className="flex flex-col gap-1">
                                 {lines.map(line => (
                                     <ElementRow
@@ -171,10 +168,10 @@ const AppSidebar = () => {
                 </SidebarContent>
                 <SidebarFooter>
                     <Label>
-                        <p className="p-1">{t("canvas:loadImage")}</p>
+                        <p className="p-1">Carica Immagine</p>
                         <Input
                             type="file"
-                            className="bg-background"
+                            className="bg-background upload-image-step"
                             onChange={handleImageUpload}
                         />
                     </Label>
@@ -182,12 +179,12 @@ const AppSidebar = () => {
                         onClick={handleDownloadJson}
                         className="w-full"
                     >
-                        {t("canvas:downloadJSON")}
+                        Scarica JSON
                     </Button>
                     <AlertDialogTrigger asChild>
                         <SidebarMenuButton variant="destructive">
                             <p className="text-center w-full">
-                                {t("canvas:deleteAllLines")}
+                                Cancella tutte le linee
                             </p>
                         </SidebarMenuButton>
                     </AlertDialogTrigger>
@@ -197,21 +194,17 @@ const AppSidebar = () => {
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>
-                        {t("canvas:deleteAllConfirmTitle")}
+                        Sei sicuro di voler cancellare tutte le linee?
                     </AlertDialogTitle>
                     <AlertDialogDescription>
-                        {t("canvas:deleteAllConfirmDescription")}
+                        Questa azione non può essere annullata, tutte le linee
+                        verranno cancellate.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                    <AlertDialogCancel className="capitalize">
-                        {t("common:cancel")}
-                    </AlertDialogCancel>
-                    <AlertDialogAction
-                        className="capitalize"
-                        onClick={handleDeleteAllLines}
-                    >
-                        {t("common:confirm")}
+                    <AlertDialogCancel>Annulla</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleDeleteAllLines}>
+                        Conferma
                     </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>

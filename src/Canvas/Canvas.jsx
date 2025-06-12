@@ -83,9 +83,7 @@ const Canvas = () => {
                 <div className="absolute inset-0 items-center justify-center flex p-20 w-fit m-auto pointer-events-none">
                     <img
                         src={image}
-                        className={`reference-image opacity-30 w-full h-full object-contain rounded-xl pointer-events-none ${
-                            isDebug ? "border border-debug" : ""
-                        }`}
+                        className="reference-image opacity-30 w-full h-full object-contain rounded-xl pointer-events-none border border-primary"
                         id="canvas"
                     />
                 </div>

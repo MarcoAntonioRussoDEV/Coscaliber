@@ -5,7 +5,7 @@ import { motion } from "motion/react";
 const PATH_LENGTH_INITIAL = 0;
 const PATH_LENGTH_ANIMATE = 1;
 const STROKE_WIDTH = 0.3;
-const STROKE_COLOR = "#fff";
+const STROKE_COLOR = "#000000";
 const DURATION = 1;
 const FILL_DELAY = DURATION;
 const DEFAULT_ANIMATION = {
@@ -40,10 +40,8 @@ const Logo = () => {
             xmlns="http://www.w3.org/2000/svg"
             xmlSpace="preserve"
             id="Livello_1"
-            x="0"
-            y="0"
             version="1.1"
-            // viewBox="0 0 400 400"
+            viewBox="10 7 150 150"
         >
             <linearGradient
                 id="SVGID_1_"
