@@ -69,7 +69,7 @@ const AppSidebar = () => {
     };
 
     const handleDownloadJson = () => {
-        let downlodable_json = { ...STATE_JSON };
+        let downlodable_json = { ...STATE_JSON, tutorial: false };
         delete downlodable_json.mouse;
         delete downlodable_json.bools;
         delete downlodable_json.utils;

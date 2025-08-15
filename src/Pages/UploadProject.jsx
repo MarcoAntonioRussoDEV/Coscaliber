@@ -4,7 +4,7 @@ import { CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import useTranslateCapitalize from "@/Hooks/use-translate-capitalize";
-import { setState } from "@/Redux/Redux-Slices/lineSlice";
+import { setState, setTutorial } from "@/Redux/Redux-Slices/lineSlice";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
@@ -29,6 +29,8 @@ const UploadProject = () => {
             }
         };
         reader.readAsText(file);
+        dispatch(setTutorial(false));
+
         navigate("/editor");
     };
     return (

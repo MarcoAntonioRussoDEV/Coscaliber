@@ -13,9 +13,13 @@ const Homepage = () => {
     const tc = useTranslateCapitalize("homepage");
     const [animationIsEnded, setAnimationIsEnded] = useState(false);
 
-    setTimeout(() => {
-        setAnimationIsEnded(true);
-    }, 4000);
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setAnimationIsEnded(true);
+        }, 4000);
+
+        return () => clearTimeout(timer);
+    }, []);
 
     return (
         <div className="flex flex-col items-center justify-center h-screen bg-gray-100">

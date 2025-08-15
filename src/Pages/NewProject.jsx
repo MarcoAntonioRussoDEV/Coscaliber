@@ -1,13 +1,5 @@
-import React, { useState, useRef } from "react";
-import Animator from "@/components/custom/Animator";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+import React, { useState, useRef, useEffect } from "react";
+import { CardContent, CardFooter } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -21,13 +13,8 @@ import {
 import { HexAlphaColorPicker } from "react-colorful";
 import HomepageCard from "@/components/custom/HomepageCard";
 import useTranslateCapitalize from "@/Hooks/use-translate-capitalize";
-import { useTranslation } from "react-i18next";
 import { Switch } from "@/components/ui/switch";
-import {
-    ArrowRightIcon,
-    ChevronLeftIcon,
-    ChevronRightIcon,
-} from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 
 const NewProject = () => {
     const dispatch = useDispatch();
