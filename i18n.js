@@ -51,7 +51,7 @@ i18n.use(LanguageDetector)
         resources,
         lng: "en", // Imposta inglese come lingua di default
         fallbackLng: "en",
-        debug: true,
+        debug: false,
         saveMissing: true,
         detection: {
             // Configurazione del language detector

@@ -7,5 +7,15 @@
     "delete_all_lines": "Elimina tutte le linee",
     "insert_a_reference_height_before": "Aggiungi prima un'altezza di riferimento",
     "alert_delete_all_lines": "Sei sicuro di voler eliminare tutte le linee?",
-    "disclamer_delete_all_lines": "Questa azione non può essere annullata, tutte le linee verranno cancellate."
+    "disclamer_delete_all_lines": "Questa azione non può essere annullata, tutte le linee verranno cancellate.",
+    "rename": "Rinomina",
+    "changeColor": "Cambia colore",
+    "delete": "Elimina",
+    "confirmDeleteTitle": "Eliminare la linea di riferimento?",
+    "confirmDeleteDescription": "L'eliminazione della linea di riferimento rimuoverà tutte le misurazioni calcolate.",
+    "loading": {
+        "expandingDomain": "espansione del dominio",
+        "searchingOnePiece": "alla ricerca del One Piece",
+        "activatingSharingan": "attivazione dello sharingan"
+    }
 }

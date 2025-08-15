@@ -129,7 +129,7 @@ const AppSidebar = () => {
                         </Label>
                         <TooltipProvider delayDuration={100}>
                             <Tooltip>
-                                <TooltipTrigger className="cursor-not-allowed">
+                                <TooltipTrigger asChild>
                                     <Button
                                         disabled={!referenceHeight || !image}
                                         onClick={handleSetDrawing}
@@ -185,12 +185,8 @@ const AppSidebar = () => {
                     >
                         {tc("canvas:download_project")}
                     </Button>
-                    <AlertDialogTrigger asChild>
-                        <SidebarMenuButton variant="destructive">
-                            <p className="text-center w-full">
-                                {tc("canvas:delete_all_lines")}
-                            </p>
-                        </SidebarMenuButton>
+                    <AlertDialogTrigger className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-destructive hover:text-destructive-foreground h-10 px-4 py-2 w-full">
+                        {tc("canvas:delete_all_lines")}
                     </AlertDialogTrigger>
                 </SidebarFooter>
             </Sidebar>

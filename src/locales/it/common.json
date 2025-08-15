@@ -1,5 +1,18 @@
 {
-    "name": "nome",
-    "cancel": "annulla",
-    "delete": "elimina"
+    "name": "Nome",
+    "close": "Chiudi",
+    "open": "Apri",
+    "cancel": "Annulla",
+    "delete": "Elimina",
+    "next": "Avanti",
+    "previous": "Indietro",
+    "save": "Salva",
+    "upload": "Carica",
+    "download": "Scarica",
+    "hide": "Nascondi",
+    "show": "Mostra",
+    "edit": "Modifica",
+    "color": "Colore",
+    "tutorial": "Tutorial",
+    "confirm": "Conferma"
 }

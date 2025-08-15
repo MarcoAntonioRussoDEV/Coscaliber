@@ -86,7 +86,7 @@ const ElementRow = ({ line, alertDialogRef }) => {
                     onClick={() => handleClick(line.id)}
                     className={`fade-in ${line.isHidden ? "opacity-35" : ""}`}
                 >
-                    <div className="cursor-pointer text-white flex justify-between w-full items-center ">
+                    <div className="cursor-pointerflex justify-between w-full items-center ">
                         <p className="truncate whitespace-nowrap text-xs">
                             {lineName} -{" "}
                             <span className="italic text-muted-foreground">

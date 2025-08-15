@@ -26,7 +26,6 @@ const calculateDistanceInCm = (state, { absoluteFrom, absoluteTo }) => {
     const { x: x2, y: y2 } = absoluteTo;
 
     const distanceInPx = calculateDistanceInPx(x1, y1, x2, y2);
-    console.log("REDUX", absoluteFrom, absoluteTo);
     const distanceInCm = state.calculated.pixelToCmRatio
         ? distanceInPx / state.calculated.pixelToCmRatio
         : 0;

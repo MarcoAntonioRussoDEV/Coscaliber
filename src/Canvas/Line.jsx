@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-// import LineModel from "@/models/LineModel";
+import LineModel from "@/Models/LineModel";
 import { updateLineVertices } from "@/Redux/Redux-Slices/lineSlice";
-import { Spinner } from "@/components/ui/spinner";
 
 const Line = ({ line }) => {
     const dispatch = useDispatch();
@@ -11,6 +10,7 @@ const Line = ({ line }) => {
     const [isDragging, setIsDragging] = useState(false);
     const [draggedVertex, setDraggedVertex] = useState(null);
     const [dragPosition, setDragPosition] = useState(null);
+    const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
     const [magnifierPosition, setMagnifierPosition] = useState({ x: 0, y: 0 });
 
     const {
@@ -64,9 +64,21 @@ const Line = ({ line }) => {
     }, []);
 
     const handleVertexMouseDown = (e, vertex) => {
+        e.preventDefault();
         e.stopPropagation();
         setIsDragging(true);
         setDraggedVertex(vertex);
+
+        // Calcola l'offset preciso tra il click e il centro del vertice
+        const rect = e.target.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        setDragOffset({
+            x: e.clientX - centerX,
+            y: e.clientY - centerY,
+        });
+
         // Salva la posizione iniziale del drag
         setDragPosition(getRelativeCoordinates(e.clientX, e.clientY));
     };
@@ -74,7 +86,14 @@ const Line = ({ line }) => {
     const handleMouseMove = e => {
         if (!isDragging || !draggedVertex) return;
 
-        const newCoords = getRelativeCoordinates(e.clientX, e.clientY);
+        // Calcola la posizione del mouse corretta sottraendo l'offset
+        const correctedMouseX = e.clientX - dragOffset.x;
+        const correctedMouseY = e.clientY - dragOffset.y;
+
+        const newCoords = getRelativeCoordinates(
+            correctedMouseX,
+            correctedMouseY
+        );
         setDragPosition(newCoords);
         setMagnifierPosition({ x: e.clientX, y: e.clientY });
 
@@ -92,6 +111,7 @@ const Line = ({ line }) => {
     const handleMouseUp = () => {
         setIsDragging(false);
         setDraggedVertex(null);
+        setDragOffset({ x: 0, y: 0 });
     };
 
     useEffect(() => {
@@ -171,8 +191,8 @@ const Line = ({ line }) => {
                     </>
                 )}
                 <text
-                    x={(fromCoords.x + toCoords.x) / 2 - 20}
-                    y={(fromCoords.y + toCoords.y) / 2 - 10}
+                    x={(fromCoords.x + toCoords.x) / 2 + 10}
+                    y={(fromCoords.y + toCoords.y) / 2}
                     fill={color}
                     className={!isSelected && isSelectionActive && "opacity-30"}
                 >
@@ -180,8 +200,11 @@ const Line = ({ line }) => {
                         ? referenceHeight
                         : line.to
                         ? line.size
-                        : "calcolando..."}{" "}
-                    {line.to && "cm"}
+                        : LineModel.fromSerializable(line).getDistanceInCm(
+                              pixelToCmRatio,
+                              mousePosition
+                          )}{" "}
+                    cm
                 </text>
             </svg>
 

@@ -1,5 +1,18 @@
 {
-    "name": "name",
-    "cancel": "cancel",
-    "delete": "delete"
+    "name": "Name",
+    "close": "Close",
+    "open": "Open",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "next": "Next",
+    "previous": "Previous",
+    "save": "Save",
+    "upload": "Upload",
+    "download": "Download",
+    "hide": "Hide",
+    "show": "Show",
+    "edit": "Edit",
+    "color": "Color",
+    "tutorial": "Tutorial",
+    "confirm": "Confirm"
 }

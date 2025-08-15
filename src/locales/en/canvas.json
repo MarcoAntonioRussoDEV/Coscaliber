@@ -7,5 +7,15 @@
     "delete_all_lines": "Delete all lines",
     "insert_a_reference_height_before": "Add a reference height first",
     "alert_delete_all_lines": "Are you sure you want to delete all lines?",
-    "disclamer_delete_all_lines": "This action cannot be undone, all lines will be deleted."
+    "disclamer_delete_all_lines": "This action cannot be undone, all lines will be deleted.",
+    "rename": "Rename",
+    "changeColor": "Change color",
+    "delete": "Delete",
+    "confirmDeleteTitle": "Delete reference line?",
+    "confirmDeleteDescription": "Deleting the reference line will remove all calculated measurements.",
+    "loading": {
+        "expandingDomain": "expanding domain",
+        "searchingOnePiece": "searching for One Piece",
+        "activatingSharingan": "activating sharingan"
+    }
 }
