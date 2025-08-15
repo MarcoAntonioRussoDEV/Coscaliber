@@ -7,6 +7,6 @@
     "projectSetupDescription": "Configura tu proyecto en pocos pasos",
     "defaultLineColor": "Color de línea predeterminado",
     "showTutorial": "¿Quieres ver el tutorial?",
-    "uploadDescription": "Carga tu proyecto aquí.",
-    "uploadFile": "cargar archivo proyecto"
+    "uploadDescription": "Agregar tu proyecto aquí.",
+    "uploadFile": "agregar archivo proyecto"
 }
