@@ -23,7 +23,7 @@ const CanvasBoard = () => {
     return (
         <div className="bg-gray-100">
             <SidebarProvider>
-                <div className={`w-96 p-2`}>
+                <div className={`w-80 p-2 absolute top-0 left-0`}>
                     <LogoFull />
                 </div>
                 {tutorial && (

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import LineModel from "@/Models/LineModel";
 import { updateLineVertices } from "@/Redux/Redux-Slices/lineSlice";
+import { t } from "i18next";
 
 const Line = ({ line }) => {
     const dispatch = useDispatch();
@@ -197,14 +198,10 @@ const Line = ({ line }) => {
                     className={!isSelected && isSelectionActive && "opacity-30"}
                 >
                     {line.id === 1
-                        ? referenceHeight
+                        ? `${referenceHeight} cm`
                         : line.to
-                        ? line.size
-                        : LineModel.fromSerializable(line).getDistanceInCm(
-                              pixelToCmRatio,
-                              mousePosition
-                          )}{" "}
-                    cm
+                        ? `${line.size} cm`
+                        : t("canvas:calculating")}
                 </text>
             </svg>
 
