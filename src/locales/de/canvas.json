@@ -18,5 +18,7 @@
         "searchingOnePiece": "auf der Suche nach dem One Piece",
         "activatingSharingan": "Sharingan aktivieren"
     },
-    "calculating": "Berechnung läuft..."
+    "calculating": "Berechnung läuft...",
+    "tutorial_step_reference_height": "Legen Sie zunächst die Referenzhöhe Ihres Bildes fest.",
+    "tutorial_step_upload_image": "Laden Sie dann Ihr Bild hoch und beginnen Sie mit der Messung!"
 }

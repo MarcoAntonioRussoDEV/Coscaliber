@@ -188,6 +188,7 @@ const lineSlice = createSlice({
             const index = state.lines.findIndex(
                 line => line.id === action.payload.id
             );
+
             if (index !== -1) {
                 state.lines[index].color = action.payload.color;
             }

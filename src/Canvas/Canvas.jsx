@@ -67,6 +67,7 @@ const Canvas = () => {
 
     return (
         <div
+            id="canvas-step"
             className={`relative w-full h-screen   ${
                 isDrawing ? "cursor-crosshair" : "cursor-auto"
             }`}

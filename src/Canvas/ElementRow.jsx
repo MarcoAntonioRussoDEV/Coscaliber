@@ -1,12 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-    Eye,
-    EyeOff,
-    MoreHorizontal,
-    Move,
-    Pencil,
-    Trash2,
-} from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -19,17 +12,9 @@ import {
     SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteLine, setSelectedLineId } from "@redux/lineSlice.js";
-import {
-    hideLine,
-    setLineColor,
-    showLine,
-} from "@/Redux/Redux-Slices/lineSlice";
+import { setSelectedLineId } from "@redux/lineSlice.js";
 import useLineActions from "@/Hooks/use-line-actions";
-import { Input } from "@/components/ui/input";
-import { GradientPicker } from "@/components/ui/color-picker";
-import { HexColorPicker } from "react-colorful";
-import { DrawerTrigger } from "@/components/ui/drawer";
+import { DrawerTrigger, Drawer } from "@/components/ui/drawer";
 import ColorDrawer from "./ColorDrawer";
 import { useTranslation } from "react-i18next";
 
@@ -71,12 +56,18 @@ const ElementRow = ({ line, alertDialogRef }) => {
 
     return (
         <>
-            <DrawerTrigger
-                className="hidden"
-                ref={drawerRef}
-            >
-                Open
-            </DrawerTrigger>
+            <Drawer>
+                <DrawerTrigger
+                    className="hidden"
+                    ref={drawerRef}
+                >
+                    Open
+                </DrawerTrigger>
+                <ColorDrawer
+                    color={line.color}
+                    id={line.id}
+                />
+            </Drawer>
             <SidebarMenuItem>
                 <SidebarMenuButton
                     ref={refer}
@@ -109,7 +100,11 @@ const ElementRow = ({ line, alertDialogRef }) => {
                             <DropdownMenuItem
                                 key={action.id}
                                 onClick={action.action}
-                                className="flex justify-between"
+                                className={{
+                                    "flex justify-between cursor-pointer": true,
+                                    "hover:bg-destructive hover:text-destructive-foreground":
+                                        action.id === "delete",
+                                }}
                             >
                                 <div className="flex gap-2 items-center">
                                     <action.icon className="w-4 h-4" />

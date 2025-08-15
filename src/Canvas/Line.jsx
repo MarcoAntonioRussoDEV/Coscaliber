@@ -195,7 +195,9 @@ const Line = ({ line }) => {
                     x={(fromCoords.x + toCoords.x) / 2 + 10}
                     y={(fromCoords.y + toCoords.y) / 2}
                     fill={color}
-                    className={!isSelected && isSelectionActive && "opacity-30"}
+                    className={
+                        !isSelected && isSelectionActive ? "opacity-30" : ""
+                    }
                 >
                     {line.id === 1
                         ? `${referenceHeight} cm`
@@ -217,16 +219,22 @@ const Line = ({ line }) => {
                     const distTop = magnifierPosition.y - rect.top;
                     const distBottom = rect.bottom - magnifierPosition.y;
 
-                    // Calcola gli offset per la posizione della lente
-                    const offsetX = Math.min(50, distLeft, distRight);
-                    const offsetY = Math.min(50, distTop, distBottom);
+                    // Il magnifier è sempre centrato sul mouse (50px di raggio)
+                    const magnifierLeft = magnifierPosition.x - 50;
+                    const magnifierTop = magnifierPosition.y - 50;
+
+                    // Calcola l'offset del background per la posizione corretta dell'immagine
+                    const backgroundOffsetX =
+                        (magnifierPosition.x - rect.left) * 3 - 50;
+                    const backgroundOffsetY =
+                        (magnifierPosition.y - rect.top) * 3 - 50;
 
                     return (
                         <div
                             className="fixed pointer-events-none z-50"
                             style={{
-                                left: magnifierPosition.x - offsetX,
-                                top: magnifierPosition.y - offsetY,
+                                left: magnifierLeft,
+                                top: magnifierTop,
                                 width: "100px",
                                 height: "100px",
                                 borderRadius: "50%",
@@ -236,13 +244,31 @@ const Line = ({ line }) => {
                                 backgroundSize: `${rect.width * 3}px ${
                                     rect.height * 3
                                 }px`,
-                                backgroundPosition: `-${
-                                    (magnifierPosition.x - rect.left) * 3 - 50
-                                }px -${
-                                    (magnifierPosition.y - rect.top) * 3 - 50
-                                }px`,
+                                backgroundPosition: `-${backgroundOffsetX}px -${backgroundOffsetY}px`,
                             }}
-                        />
+                        >
+                            {/* Croce al centro del magnifier */}
+                            <div className="relative w-full h-full">
+                                {/* Linea orizzontale */}
+                                <div
+                                    className="absolute top-1/2 left-1/2 bg-red-500"
+                                    style={{
+                                        width: "20px",
+                                        height: "2px",
+                                        transform: "translate(-50%, -50%)",
+                                    }}
+                                />
+                                {/* Linea verticale */}
+                                <div
+                                    className="absolute top-1/2 left-1/2 bg-red-500"
+                                    style={{
+                                        width: "2px",
+                                        height: "20px",
+                                        transform: "translate(-50%, -50%)",
+                                    }}
+                                />
+                            </div>
+                        </div>
                     );
                 })()}
         </>
