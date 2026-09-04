@@ -37,6 +37,8 @@ import { Tooltip } from "@/components/ui/tooltip";
 import { deleteAllLines, setImage } from "@/Redux/Redux-Slices/lineSlice";
 import { Drawer } from "@/components/ui/drawer";
 import useTranslateCapitalize from "@/Hooks/use-translate-capitalize";
+import { exportRealScalePdf } from "@/lib/pdfTiledExport";
+import { useState } from "react";
 
 const AppSidebar = () => {
     const dispatch = useDispatch();
@@ -51,6 +53,7 @@ const AppSidebar = () => {
     const STATE_JSON = useSelector(state => state.lines);
     const alertDialogRef = useRef(null);
     const { isMobile, setOpenMobile } = useSidebar();
+    const [isExportingPdf, setIsExportingPdf] = useState(false);
     const handleSetDrawing = () => {
         if (image) {
             dispatch(setIsDrawing(true));
@@ -82,6 +85,22 @@ const AppSidebar = () => {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+    };
+
+    const handleExportPdf = async () => {
+        setIsExportingPdf(true);
+        try {
+            await exportRealScalePdf({ pixelToCmRatio, projectName });
+        } catch (err) {
+            if (err.message === "MISSING_REFERENCE") {
+                alert(tc("canvas:pdf_export_missing_reference"));
+            } else {
+                console.error(err);
+                alert(tc("canvas:pdf_export_error"));
+            }
+        } finally {
+            setIsExportingPdf(false);
+        }
     };
 
     const handleImageUpload = e => {
@@ -185,6 +204,30 @@ const AppSidebar = () => {
                     >
                         {tc("canvas:download_project")}
                     </Button>
+                    <TooltipProvider delayDuration={100}>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Button
+                                    disabled={!pixelToCmRatio || isExportingPdf}
+                                    onClick={handleExportPdf}
+                                    className="w-full"
+                                >
+                                    {isExportingPdf
+                                        ? tc("canvas:pdf_export_generating")
+                                        : tc("canvas:export_pdf")}
+                                </Button>
+                            </TooltipTrigger>
+                            {!pixelToCmRatio && (
+                                <TooltipContent
+                                    side="left"
+                                    sideOffset={12}
+                                    className="text-center bg-secondary text-secondary-foreground p-2 border shadow"
+                                >
+                                    {tc("canvas:pdf_export_missing_reference")}
+                                </TooltipContent>
+                            )}
+                        </Tooltip>
+                    </TooltipProvider>
                     <AlertDialogTrigger className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-destructive hover:text-destructive-foreground h-10 px-4 py-2 w-full">
                         {tc("canvas:delete_all_lines")}
                     </AlertDialogTrigger>

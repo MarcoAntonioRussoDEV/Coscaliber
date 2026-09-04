@@ -20,5 +20,9 @@
     },
     "calculating": "calcolo in corso...",
     "tutorial_step_reference_height": "Per iniziare, imposta l'altezza di riferimento della tua immagine.",
-    "tutorial_step_upload_image": "Poi carica la tua immagine e inizia a misurare!"
+    "tutorial_step_upload_image": "Poi carica la tua immagine e inizia a misurare!",
+    "export_pdf": "Esporta PDF in scala reale",
+    "pdf_export_generating": "Generazione PDF...",
+    "pdf_export_missing_reference": "Imposta prima un'altezza di riferimento e disegna la linea di riferimento",
+    "pdf_export_error": "Errore durante la generazione del PDF, riprova"
 }
