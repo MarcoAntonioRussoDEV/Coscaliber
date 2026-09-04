@@ -249,6 +249,11 @@ const lineSlice = createSlice({
                     ...state.lines[index],
                     from: updatedLine.from,
                     to: updatedLine.to,
+                    absoluteFrom:
+                        updatedLine.absoluteFrom ??
+                        state.lines[index].absoluteFrom,
+                    absoluteTo:
+                        updatedLine.absoluteTo ?? state.lines[index].absoluteTo,
                 };
 
                 // Se è la linea di riferimento, aggiorna anche quella e ricalcola tutte le linee

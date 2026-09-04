@@ -98,12 +98,23 @@ const Line = ({ line }) => {
         setDragPosition(newCoords);
         setMagnifierPosition({ x: e.clientX, y: e.clientY });
 
+        const imageElement = getImageElement();
+        const imageRect = imageElement?.getBoundingClientRect();
+        const newAbsoluteCoords = imageRect
+            ? {
+                  x: correctedMouseX - imageRect.left,
+                  y: correctedMouseY - imageRect.top,
+              }
+            : { x: correctedMouseX, y: correctedMouseY };
+
         requestAnimationFrame(() => {
             const updatedLine = { ...line };
             if (draggedVertex === "from") {
                 updatedLine.from = newCoords;
+                updatedLine.absoluteFrom = newAbsoluteCoords;
             } else {
                 updatedLine.to = newCoords;
+                updatedLine.absoluteTo = newAbsoluteCoords;
             }
             dispatch(updateLineVertices(updatedLine));
         });
